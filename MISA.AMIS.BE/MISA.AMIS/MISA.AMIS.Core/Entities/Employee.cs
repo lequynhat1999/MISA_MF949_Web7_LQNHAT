@@ -135,6 +135,30 @@ namespace MISA.AMIS.Core.Entities
         [NotMap]
         public string DepartmentCode { get; set; }
 
+        /// <summary>
+        /// Tên giới tính
+        /// </summary>
+        /// CreatedBy : LQNHAT(27/08/2021)
+        [NotMap]
+        public string GenderName
+        {
+            get
+            {
+                switch (Gender)
+                {
+                    case 0:
+                        return "Nữ";
+                    case 1:
+                        return "Nam";
+                    case 2:
+                        return "Không xác định";
+                    default:
+                        return "";
+                }
+            }
+
+            set { }
+        }
 
     }
 }

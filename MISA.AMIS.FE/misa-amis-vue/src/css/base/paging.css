@@ -1,0 +1,38 @@
+.paging
+{
+    display: flex;
+    padding-top: 17px;
+    padding-left: 40px;
+    position: relative;
+}
+
+.page-size
+{
+    position: absolute;
+    right: 230px;
+    bottom: -3px;
+}
+
+.index-page
+{
+    position: absolute;
+    right: 60px;
+    top: 12px;
+}
+
+#select-size 
+{
+    height: 32px;
+    width: 198px;
+}
+
+.index-page
+{
+    display: flex;
+}
+
+.index-paging
+{
+    padding-left: 5px;
+    padding-right: 5px;
+}

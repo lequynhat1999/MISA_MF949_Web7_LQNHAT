@@ -1,0 +1,23 @@
+.m-btn {
+  background-color: #2ca01c;
+  border-radius: 4px;
+  height: 36px;
+  color: #ffffff;
+  font-size: 13px;
+  padding-left: 16px;
+  padding-right: 16px;
+  align-items: center;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.m-btn:hover
+{
+    background-color: #35bf22;
+}
+
+.m-btn:active
+{
+    background-color: #2ca01c;
+}

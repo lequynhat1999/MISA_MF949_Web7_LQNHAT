@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using MISA.AMIS.Core.Entities;
 using MISA.AMIS.Core.Interfaces.Repository;
 using MISA.AMIS.Core.Interfaces.Service;
@@ -17,13 +18,15 @@ namespace MISA.AMIS.Api.Controllers
         #region DECLARE
         IEmployeeService _employeeService;
         IEmployeeRepository _employeeRepository;
+        private readonly IHostingEnvironment _hostingEnvironment;
         #endregion
 
         #region Constructor
-        public EmployeesController(IEmployeeService employeeService, IEmployeeRepository employeeRepository) : base(employeeRepository, employeeService)
+        public EmployeesController(IEmployeeService employeeService, IEmployeeRepository employeeRepository, IHostingEnvironment hostingEnvironment) : base(employeeRepository, employeeService)
         {
             _employeeRepository = employeeRepository;
             _employeeService = employeeService;
+            _hostingEnvironment = hostingEnvironment;
         }
         #endregion
 
@@ -105,18 +108,33 @@ namespace MISA.AMIS.Api.Controllers
         {
             try
             {
-                var streamData = _employeeRepository.ExportEmployee();
-                if (streamData != null)
+                // đường dẫn đến wwwroot
+                string folder = _hostingEnvironment.WebRootPath;
+
+                // tạo file với đường dẫn wwwroot, tên là danh_sach_nhan_vien
+                var file = new FileInfo(Path.Combine(folder, "Danh_sach_nhan_vien.xlsx"));
+                if (file.Exists)
                 {
-                    Stream stream = (Stream)streamData;
-                    stream.Position = 0;
-                    string excelName = $"Employees.xlsx";
-                    return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", excelName);
+                    // xóa file cũ nếu đã tồn tại
+                    file.Delete();
+                    file = new FileInfo(Path.Combine(folder, "Danh_sach_nhan_vien.xlsx"));
+                }
+
+                var serviceResult = _employeeService.ExportEmployees(folder);
+                if (serviceResult.MISACode == Core.MISAEnum.EnumServiceResult.Success)
+                {
+                    return StatusCode(200, serviceResult);
                 }
                 else
                 {
-                    return Ok("Thuc hien khong thanh cong");
+                    var msg = new
+                    {
+                        userMsg = Properties.ResourceVnEmployee.User_ErrorMsg_NoContent,
+                    };
+                    return StatusCode(204, msg);
                 }
+
+
             }
             catch (Exception ex)
             {

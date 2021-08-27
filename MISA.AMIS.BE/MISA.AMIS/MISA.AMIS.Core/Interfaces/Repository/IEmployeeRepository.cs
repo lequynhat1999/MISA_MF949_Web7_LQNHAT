@@ -28,6 +28,5 @@ namespace MISA.AMIS.Core.Interfaces.Repository
         /// CreateBy: LQNHAT(27/08/2021)
         object GetByPaging(int pageIndex, int pageSize, string positionId, string departmentId, string keysearch);
 
-        object ExportEmployee();
     }
 }

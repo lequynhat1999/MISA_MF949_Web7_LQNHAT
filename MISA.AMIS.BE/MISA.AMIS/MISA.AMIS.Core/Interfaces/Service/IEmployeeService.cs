@@ -9,5 +9,6 @@ namespace MISA.AMIS.Core.Interfaces.Service
 {
     public interface IEmployeeService : IBaseService<Employee>
     {
+        ServiceResult ExportEmployees(string folder);
     }
 }

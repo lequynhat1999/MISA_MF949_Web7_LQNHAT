@@ -1,0 +1,61 @@
+
+.title-content
+{
+    display: flex;
+    position: relative;
+    background: #e6e6e6;
+    height: 82px;
+}
+
+.btn-add-employee
+{
+    position: absolute;
+    right: 38px;
+    top: 28px;
+}
+
+.toolbar
+{
+    position: relative;
+    display: flex;
+    height: 56px;
+}
+
+.toolbar-right
+{
+    display: flex;
+    position: absolute;
+    right: 50px;
+    top: 20px;
+}
+
+.box-search
+{
+    display: flex;
+    position: relative;
+    margin-right: 16px;
+}
+
+.reload
+{
+    background: url("../../assets/img/Sprites.64af8f61.svg") no-repeat -1098px -90px;
+	width: 24px;
+	height: 24px;
+    margin-top: 8px;
+    margin-right: 16px;
+    cursor: pointer;
+}
+
+.export
+{
+    background: url("../../assets/img/Sprites.64af8f61.svg") no-repeat -704px -200px;
+	width: 24px;
+	height: 24px;
+    margin-top: 6px;
+    cursor: pointer;
+}
+
+.box-table
+{
+    background-color: #e6e6e6;
+}

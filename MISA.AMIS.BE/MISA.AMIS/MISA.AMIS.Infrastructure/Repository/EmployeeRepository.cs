@@ -4,9 +4,11 @@ using Microsoft.Extensions.Configuration;
 using MISA.AMIS.Core.Entities;
 using MISA.AMIS.Core.Interfaces.Repository;
 using OfficeOpenXml;
+using OfficeOpenXml.Style;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -17,13 +19,13 @@ namespace MISA.AMIS.Infrastructure.Repository
     public class EmployeeRepository : BaseRepository<Employee>, IEmployeeRepository
     {
         #region DECLARE
-        private readonly IHostingEnvironment _hostingEnvironment;
+
         #endregion
 
         #region Constructor
-        public EmployeeRepository(IConfiguration configuration, IHostingEnvironment hostingEnvironment) : base(configuration)
+        public EmployeeRepository(IConfiguration configuration) : base(configuration)
         {
-            _hostingEnvironment = hostingEnvironment;
+
         }
         #endregion
 
@@ -118,26 +120,7 @@ namespace MISA.AMIS.Infrastructure.Repository
             return newEmployeeCode;
         }
 
-        /// <summary>
-        /// Xuất khẩu dữ liệu nhân viên
-        /// </summary>
-        /// <returns></returns>
-        /// CreatedBy : LQNHAT(27/08/2021)
-        public object ExportEmployee()
-        {
-            var employees = Get();
-            var stream = new MemoryStream();
-            using (var package = new ExcelPackage(stream))
-            {
-                var workSheet = package.Workbook.Worksheets.Add("Sheet1");
-                workSheet.Cells.LoadFromCollection(employees, true);
-                package.Save();
-            }
-            return stream;
-            //string folder = _hostingEnvironment.WebRootPath;
-            //string excelName = $"UserList-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
-            //string downloadUrl = string.Format("{0}://{1}/{2}", Request.Scheme, Request.Host, excelName);
-        }
+
 
         #endregion
     }
