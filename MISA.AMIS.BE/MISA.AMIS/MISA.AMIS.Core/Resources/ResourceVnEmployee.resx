@@ -159,6 +159,9 @@
   <data name="Exception_ErrorMsg" xml:space="preserve">
     <value>Có lỗi xảy ra, vui lòng liên hệ cho MISA</value>
   </data>
+  <data name="NotValid_IdEmployee" xml:space="preserve">
+    <value>ID nhân viên không tồn tại</value>
+  </data>
   <data name="User_ErrorMsg_Check_EmployeeCode" xml:space="preserve">
     <value>Mã nhân viên đã tồn tại</value>
   </data>

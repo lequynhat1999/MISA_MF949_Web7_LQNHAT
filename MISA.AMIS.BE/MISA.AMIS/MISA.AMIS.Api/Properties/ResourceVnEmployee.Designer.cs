@@ -142,11 +142,29 @@ namespace MISA.AMIS.Api.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to EmployeeId is not valid.
+        /// </summary>
+        public static string Dev_NotValid_IdEmployee {
+            get {
+                return ResourceManager.GetString("Dev_NotValid_IdEmployee", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Có lỗi xảy ra, vui lòng liên hệ cho MISA.
         /// </summary>
         public static string Exception_ErrorMsg {
             get {
                 return ResourceManager.GetString("Exception_ErrorMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ID nhân viên không tồn tại.
+        /// </summary>
+        public static string NotValid_IdEmployee {
+            get {
+                return ResourceManager.GetString("NotValid_IdEmployee", resourceCulture);
             }
         }
         

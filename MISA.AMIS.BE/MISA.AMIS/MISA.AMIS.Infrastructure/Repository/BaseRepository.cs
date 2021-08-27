@@ -94,21 +94,12 @@ namespace MISA.AMIS.Infrastructure.Repository
         public int Delete(Guid entityId)
         {
             // xóa dữ liệu
-            var entityCurrent = GetById(entityId);
-            if (entityCurrent != null)
-            {
-                DynamicParameters parameters = new DynamicParameters();
-                parameters.Add("@entityIdParam", entityId);
-                var sqlQuery = $"DELETE FROM {_tableName} WHERE {_tableName}Id = @entityIdParam";
-                var result = _dbConnection.Execute(sqlQuery, param: parameters);
-                //transaction.Commit();
-                return result;
-            }
-            else
-            {
-                return 0;
-            }
-
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@entityIdParam", entityId);
+            var sqlQuery = $"DELETE FROM {_tableName} WHERE {_tableName}Id = @entityIdParam";
+            var result = _dbConnection.Execute(sqlQuery, param: parameters);
+            //transaction.Commit();
+            return result;
         }
 
         /// <summary>
@@ -125,8 +116,9 @@ namespace MISA.AMIS.Infrastructure.Repository
                 var entities = _dbConnection.Query<TEntity>(sqlQuery);
                 return entities;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Console.WriteLine(ex.Message);
                 throw;
             }
         }

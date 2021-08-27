@@ -187,6 +187,15 @@ namespace MISA.AMIS.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ID nhân viên không tồn tại.
+        /// </summary>
+        public static string NotValid_IdEmployee {
+            get {
+                return ResourceManager.GetString("NotValid_IdEmployee", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Mã nhân viên đã tồn tại.
         /// </summary>
         public static string User_ErrorMsg_Check_EmployeeCode {

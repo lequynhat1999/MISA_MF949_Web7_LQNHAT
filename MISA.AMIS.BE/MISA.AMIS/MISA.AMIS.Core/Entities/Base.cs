@@ -65,6 +65,8 @@ namespace MISA.AMIS.Core.Entities
             FieldName = fieldName;
         }
     }
+
+
     #endregion
     public class Base
     {
@@ -76,24 +78,24 @@ namespace MISA.AMIS.Core.Entities
         public EnumEntityState EntityState { get; set; } = EnumEntityState.Add;
 
         /// <summary>
-        /// Ngày tạo
-        /// </summary>
-        public DateTime? CreatedDate { get; set; }
-
-        /// <summary>
         /// Tạo bởi
         /// </summary>
         public string CreatedBy { get; set; }
 
         /// <summary>
-        /// Ngày chỉnh sửa
+        /// Ngày tạo
         /// </summary>
-        public DateTime? ModifiedDate { get; set; }
+        public DateTime? CreatedDate { get; set; }
 
         /// <summary>
         /// Được chỉnh sửa bởi
         /// </summary>
         public string ModifiedBy { get; set; }
+
+        /// <summary>
+        /// Ngày chỉnh sửa
+        /// </summary>
+        public DateTime? ModifiedDate { get; set; }
         #endregion
     }
 }

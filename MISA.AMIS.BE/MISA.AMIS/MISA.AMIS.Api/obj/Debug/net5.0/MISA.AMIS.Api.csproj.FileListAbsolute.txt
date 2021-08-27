@@ -35,3 +35,6 @@ C:\Users\BVCN 88\OneDrive\Desktop\Bài Đánh Giá\MISA.AMIS.BE\MISA.AMIS\MISA.A
 C:\Users\BVCN 88\OneDrive\Desktop\Bài Đánh Giá\MISA.AMIS.BE\MISA.AMIS\MISA.AMIS.Api\obj\Debug\net5.0\ref\MISA.AMIS.Api.dll
 C:\Users\BVCN 88\OneDrive\Desktop\Bài Đánh Giá\MISA.AMIS.BE\MISA.AMIS\MISA.AMIS.Api\obj\Debug\net5.0\MISA.AMIS.Api.pdb
 C:\Users\BVCN 88\OneDrive\Desktop\Bài Đánh Giá\MISA.AMIS.BE\MISA.AMIS\MISA.AMIS.Api\obj\Debug\net5.0\MISA.AMIS.Api.genruntimeconfig.cache
+C:\Users\BVCN 88\OneDrive\Desktop\Bài Đánh Giá\MISA.AMIS.BE\MISA.AMIS\MISA.AMIS.Api\bin\Debug\net5.0\EPPlus.dll
+C:\Users\BVCN 88\OneDrive\Desktop\Bài Đánh Giá\MISA.AMIS.BE\MISA.AMIS\MISA.AMIS.Api\bin\Debug\net5.0\Microsoft.IO.RecyclableMemoryStream.dll
+C:\Users\BVCN 88\OneDrive\Desktop\Bài Đánh Giá\MISA.AMIS.BE\MISA.AMIS\MISA.AMIS.Api\bin\Debug\net5.0\System.Xml.XPath.XmlDocument.dll

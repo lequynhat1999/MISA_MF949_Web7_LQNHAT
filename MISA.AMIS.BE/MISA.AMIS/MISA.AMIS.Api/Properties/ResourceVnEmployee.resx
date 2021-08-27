@@ -144,8 +144,14 @@
   <data name="Dev_ErrorMsg__Null_PositionCode" xml:space="preserve">
     <value>PositionCode không được phép null</value>
   </data>
+  <data name="Dev_NotValid_IdEmployee" xml:space="preserve">
+    <value>EmployeeId is not valid</value>
+  </data>
   <data name="Exception_ErrorMsg" xml:space="preserve">
     <value>Có lỗi xảy ra, vui lòng liên hệ cho MISA</value>
+  </data>
+  <data name="NotValid_IdEmployee" xml:space="preserve">
+    <value>ID nhân viên không tồn tại</value>
   </data>
   <data name="User_ErrorMsg_Check_EmployeeCode" xml:space="preserve">
     <value>Mã nhân viên đã tồn tại</value>

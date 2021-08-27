@@ -144,16 +144,31 @@ namespace MISA.AMIS.Api.Controllers
         {
             try
             {
-                var serviceResult = _baseService.Update(entity, entityId);
-                // 4. trả về cho client
-                if (serviceResult.MISACode == Core.MISAEnum.EnumServiceResult.Success)
+                // check Id có tồn tại k ?
+                var entityCurrent = _baseRepository.GetById(entityId);
+                if (entityCurrent != null)
                 {
-                    return StatusCode(200, serviceResult.Data);
+                    var serviceResult = _baseService.Update(entity, entityId);
+                    // 4. trả về cho client
+                    if (serviceResult.MISACode == Core.MISAEnum.EnumServiceResult.Success)
+                    {
+                        return StatusCode(200, serviceResult.Data);
+                    }
+                    else
+                    {
+                        return BadRequest(serviceResult);
+                    }
                 }
                 else
                 {
-                    return BadRequest(serviceResult);
+                    var msg = new
+                    {
+                        devMsg = Properties.ResourceVnEmployee.Dev_NotValid_IdEmployee,
+                        userMsg = Properties.ResourceVnEmployee.NotValid_IdEmployee,
+                    };
+                    return StatusCode(500, msg);
                 }
+
             }
             catch (Exception ex)
             {
@@ -177,9 +192,24 @@ namespace MISA.AMIS.Api.Controllers
         {
             try
             {
-                // 4. trả kết quả về client
-                var result = _baseRepository.Delete(entityId);
-                return StatusCode(200, result);
+                // check Id có tồn tại k ?
+                var entityCurrent = _baseRepository.GetById(entityId);
+                if (entityCurrent != null)
+                {
+                    // 4. trả kết quả về client
+                    var result = _baseRepository.Delete(entityId);
+                    return StatusCode(200, result);
+                }
+                else
+                {
+                    var msg = new
+                    {
+                        devMsg = Properties.ResourceVnEmployee.Dev_NotValid_IdEmployee,
+                        userMsg = Properties.ResourceVnEmployee.NotValid_IdEmployee,
+                    };
+                    return StatusCode(500, msg);
+                }
+
             }
             catch (Exception ex)
             {
@@ -192,6 +222,12 @@ namespace MISA.AMIS.Api.Controllers
             }
         }
 
+        /// <summary>
+        /// Xóa nhiều đối tượng
+        /// </summary>
+        /// <param name="entitesId">Id các đối tượng</param>
+        /// <returns></returns>
+        /// CreatedBy: LQNHAT(27/08/2021)
         [HttpDelete]
         public IActionResult DeleteEntites(string entitesId)
         {
