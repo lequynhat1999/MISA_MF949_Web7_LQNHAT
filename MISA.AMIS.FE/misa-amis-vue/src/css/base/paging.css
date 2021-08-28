@@ -1,7 +1,7 @@
 .paging
 {
     display: flex;
-    padding-top: 17px;
+    padding-top: 14px;
     padding-left: 40px;
     position: relative;
 }
@@ -9,8 +9,8 @@
 .page-size
 {
     position: absolute;
-    right: 230px;
-    bottom: -3px;
+    right: 265px;
+    bottom: -4px;
 }
 
 .index-page
@@ -29,10 +29,11 @@
 .index-page
 {
     display: flex;
+    margin-right: 30px;
 }
 
 .index-paging
 {
-    padding-left: 5px;
-    padding-right: 5px;
+    padding-left: 8px;
+    padding-right: 8px;
 }

@@ -1,56 +1,62 @@
-.table-employee
-{
-    margin-top: 25px;
-    margin-left: 40px;
-    margin-right: 40px;
-    overflow-y: scroll;
-    height: calc(100vh - 257px);
+.table-employee {
+  margin-top: 25px;
+  margin-left: 40px;
+  margin-right: 40px;
+  overflow-y: scroll;
+  height: calc(100vh - 257px);
 }
 
-.table-employee th
-{
+.table-employee th,
+td {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.table-employee th {
   position: sticky;
   top: 0;
   background-color: #fff;
 }
 
-.table-employee th:not(:first-child) 
-{
-    border-right: 1px solid #c7c7c7;
-    border-bottom: 1px solid #c7c7c7;
-    background-color: #eceef1;
-    height: 34px ;
-    min-width: 143px;
-    text-align: left;
-    padding-left: 10px;
-    white-space: nowrap;
+.table-employee th:not(:first-child) {
+  border-right: 1px solid #c7c7c7;
+  border-bottom: 1px solid #c7c7c7;
+  background-color: #eceef1;
+  padding-right: 10px;
+  height: 34px;
+  min-width: 143px;
+  /* max-width: 150px; */
+  text-align: left;
+  padding-left: 10px;
+  white-space: nowrap;
 }
 
-.table-employee th:first-child
-{
-    border-right: 1px solid #c7c7c7;
-    border-bottom: 1px solid #c7c7c7;
-    background-color: #eceef1;
-    padding-left: 12px;
-    padding-right: 12px;
+.table-employee th:first-child {
+  border-right: 1px solid #c7c7c7;
+  border-bottom: 1px solid #c7c7c7;
+  background-color: #eceef1;
+  padding-left: 12px;
+  padding-right: 12px;
 }
 
-.table-employee td:not(:first-child) 
-{
-    border-right: 1px solid #c7c7c7;
-    border-bottom: 1px solid #c7c7c7;
-    min-width: 143px;
-    text-align: left;
-    padding-left: 10px;
-    height: 47px;
+.table-employee td:not(:first-child) {
+  border-right: 1px solid #c7c7c7;
+  border-bottom: 1px solid #c7c7c7;
+  /* min-width: 143px; */
+  text-align: left;
+  max-width: 160px;
+  padding-left: 10px;
+  height: 47px;
+  cursor: pointer;
 }
 
-.table-employee td:first-child 
-{
-    border-right: 1px solid #c7c7c7;
-    border-bottom: 1px solid #c7c7c7;
-    text-align: left;
-    padding-left: 12px;
-    padding-right: 12px;
-    height: 47px;
+.table-employee td:first-child {
+  border-right: 1px solid #c7c7c7;
+  border-bottom: 1px solid #c7c7c7;
+  text-align: left;
+  padding-left: 12px;
+  padding-right: 12px;
+  height: 47px;
+  cursor: pointer;
 }
