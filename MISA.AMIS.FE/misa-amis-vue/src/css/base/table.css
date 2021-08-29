@@ -5,6 +5,16 @@
   overflow-y: scroll;
   height: calc(100vh - 257px);
 }
+.table-employee thead
+{
+  position: relative;
+  z-index: 4;
+}
+
+.table-employee tr{
+  position: relative;
+  z-index: 1;
+}
 
 .table-employee th,
 td {
@@ -16,7 +26,7 @@ td {
 .table-employee th {
   position: sticky;
   top: 0;
-  background-color: #fff;
+  background-color: #eceef1;
 }
 
 .table-employee th:not(:first-child) {

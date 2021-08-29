@@ -1,9 +1,10 @@
 <template>
   <div class="dropdown dropdown-filter" @click="toggleDropdown">
     <div class="dropdown-text">{{ selectedText }}</div>
-    <div class="dropdown-icon" :class="{rotate : isRotate}">
-      <i class="fas fa-chevron-down"></i>
+    <div class="dropdown-icon" :class="{ rotate: isRotate }">
+      <div class="btn-dropdown"></div>
     </div>
+      <div class="box-icon"></div>
     <div
       class="dropdown-data"
       :class="{ 'dropdown-hidden': isClose }"
@@ -45,16 +46,16 @@ export default {
     };
   },
 
-//   watch: {
-//     async value() {
-//       // wait get full options
-//       this.items = [];
-//       await this.getItem();
-//       let i = this.getIndexByValue();
-//       if (i != -1) this.selectItem(i);
-//       else this.selectItem(0);
-//     },
-//   },
+  //   watch: {
+  //     async value() {
+  //       // wait get full options
+  //       this.items = [];
+  //       await this.getItem();
+  //       let i = this.getIndexByValue();
+  //       if (i != -1) this.selectItem(i);
+  //       else this.selectItem(0);
+  //     },
+  //   },
 
   methods: {
     /**--------------------------------------------------------------------
@@ -140,27 +141,16 @@ export default {
     },
 
     /**------------------------------------------------------
-     * Hàm bắt sự kiện nút reload 
+     * Hàm bắt sự kiện nút reload
      * khi reload sẽ đưa text dropdown về mặc định
      * CreatedBy: LQNHAT(28/08/2021)
      */
-    setTextDefault()
-    {
+    setTextDefault() {
       this.selectedText = this.items[0].Text;
       this.selectedValue = this.items[0].Value;
       this.currentIndex = 0;
-    },
-
-    /**------------------------------------------------------
-     * Hàm set value mặc định cho các dropdown
-     * CreateBy: CreatedBy: LQNHAT(28/08/2021)
-     */
-    setValueDropdownDefault()
-    {
-      this.selectedText = this.items[0].Text;
-      this.selectedValue = this.items[0].Value;
-      this.currentIndex = 0;
-      this.$emit("get", this.selectedValue);
+      this.$emit("setValueDefaultDropdown",this.selectedValue);
+      debugger; // eslint-disable-line
     },
 
     /**----------------------------------------------------------------------

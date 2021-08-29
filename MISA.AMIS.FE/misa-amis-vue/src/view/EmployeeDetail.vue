@@ -36,18 +36,43 @@
                 <div class="text-modal">
                   <b>Mã <span style="color: red">*</span></b>
                 </div>
-                <input
-                  type="text"
-                  ref="txtEmployeeCode"
-                  v-model="employee.EmployeeCode"
-                  class="input-modal width-100"
-                />
+                <ValidationProvider
+                  rules="required"
+                  name="Mã nhân viên"
+                  v-slot="{ errors }"
+                >
+                  <input
+                    type="text"
+                    ref="txtEmployeeCode"
+                    v-model="employee.EmployeeCode"
+                    class="input-modal width-100"
+                    :class="{
+                      'border-red': errors.length > 0 ? true : false,
+                    }"
+                  />
+                  <span style="color: red">{{ errors[0] }}</span>
+                </ValidationProvider>
               </div>
               <div class="input width-60">
                 <div class="text-modal">
                   <b>Tên <span style="color: red">*</span></b>
                 </div>
-                <input type="text" class="input-modal width-100" v-model="employee.FullName"/>
+                <ValidationProvider
+                  rules="required"
+                  
+                  name="Họ và tên"
+                  v-slot="{ errors }"
+                >
+                  <input
+                    type="text"
+                    class="input-modal width-100"
+                    v-model="employee.FullName"
+                    :class="{
+                      'border-red': errors.length > 0 ? true : false,
+                    }"
+                  />
+                  <span style="color: red">{{ errors[0] }}</span>
+                </ValidationProvider>
               </div>
             </div>
           </div>
@@ -57,7 +82,11 @@
                 <div class="text-modal">
                   <b>Ngày sinh</b>
                 </div>
-                <input type="date" class="input-modal width-100" v-model="employee.DateOfBirth"/>
+                <input
+                  type="date"
+                  class="input-modal width-100"
+                  v-model="employee.DateOfBirth"
+                />
               </div>
               <div class="input pdl-16 width-65">
                 <div class="text-modal">
@@ -69,7 +98,8 @@
                     id="Nam"
                     name="gender"
                     class="radio-gender"
-                    :checked=" employee.GenderName == 'Nam' ? true : false "
+                    :checked="employee.GenderName == 'Nam' ? true : false"
+                    @click="employee.Gender = 1"
                   />
                   <label for="Nam" class="text-radio">Nam</label>
                   <input
@@ -77,7 +107,8 @@
                     id="Nữ"
                     name="gender"
                     class="radio-gender"
-                    :checked=" employee.GenderName == 'Nữ' ? true : false "
+                    :checked="employee.GenderName == 'Nữ' ? true : false"
+                    @click="employee.Gender = 0"
                   />
                   <label for="Nữ" class="text-radio">Nữ</label>
                   <input
@@ -85,7 +116,10 @@
                     id="Khác"
                     name="gender"
                     class="radio-gender"
-                    :checked=" employee.GenderName == 'Không xác định' ? true : false "
+                    :checked="
+                      employee.GenderName == 'Không xác định' ? true : false
+                    "
+                    @click="employee.Gender = 2"
                   />
                   <label for="Khác" class="text-radio">Khác</label>
                 </div>
@@ -100,7 +134,11 @@
                 <div class="text-modal">
                   <b>Đơn vị <span style="color: red">*</span></b>
                 </div>
-                <input type="text" class="input-modal width-100"  v-model="employee.DepartmentName"/>
+                <input
+                  type="text"
+                  class="input-modal width-100"
+                  v-model="employee.DepartmentId"
+                />
               </div>
             </div>
           </div>
@@ -110,13 +148,21 @@
                 <div class="text-modal">
                   <b>Số CMND </b>
                 </div>
-                <input type="text" class="input-modal width-100" v-model="employee.IdentityNumber"/>
+                <input
+                  type="text"
+                  class="input-modal width-100"
+                  v-model="employee.IdentityNumber"
+                />
               </div>
               <div class="input width-35">
                 <div class="text-modal">
                   <b>Ngày cấp</b>
                 </div>
-                <input type="date" class="input-modal width-100" v-model="employee.IdentityDate"/>
+                <input
+                  type="date"
+                  class="input-modal width-100"
+                  v-model="employee.IdentityDate"
+                />
               </div>
             </div>
           </div>
@@ -128,7 +174,11 @@
                 <div class="text-modal">
                   <b>Chức danh</b>
                 </div>
-                <input type="text" class="input-modal width-100" v-model="employee.PositionName"/>
+                <input
+                  type="text"
+                  class="input-modal width-100"
+                  v-model="employee.PositionName"
+                />
               </div>
             </div>
           </div>
@@ -138,7 +188,11 @@
                 <div class="text-modal">
                   <b>Nơi cấp</b>
                 </div>
-                <input type="text" class="input-modal width-100" v-model="employee.IdentityPlace"/>
+                <input
+                  type="text"
+                  class="input-modal width-100"
+                  v-model="employee.IdentityPlace"
+                />
               </div>
             </div>
           </div>
@@ -149,7 +203,11 @@
               <div class="text-modal">
                 <b>Địa chỉ</b>
               </div>
-              <input type="text" class="input-modal width-100" v-model="employee.Address"/>
+              <input
+                type="text"
+                class="input-modal width-100"
+                v-model="employee.Address"
+              />
             </div>
           </div>
         </div>
@@ -158,19 +216,37 @@
             <div class="text-modal">
               <b>ĐT di động</b>
             </div>
-            <input type="text" class="input-modal width-100" v-model="employee.PhoneNumber"/>
+            <input
+              type="text"
+              class="input-modal width-100"
+              v-model="employee.PhoneNumber"
+            />
           </div>
           <div class="input pdr-8">
             <div class="text-modal">
               <b>ĐT cố định</b>
             </div>
-            <input type="text" class="input-modal width-100" v-model="employee.HotLine"/>
+            <input
+              type="text"
+              class="input-modal width-100"
+              v-model="employee.HotLine"
+            />
           </div>
           <div class="input pdr-8">
             <div class="text-modal">
               <b>Email</b>
             </div>
-            <input type="text" class="input-modal width-100" v-model="employee.Email"/>
+            <ValidationProvider rules="email" name="Email" v-slot="{ errors }">
+              <input
+                type="text"
+                class="input-modal width-100"
+                v-model="employee.Email"
+                :class="{
+                  'border-red': errors.length > 0 ? true : false,
+                }"
+              />
+              <span style="color: red">{{ errors[0] }}</span>
+            </ValidationProvider>
           </div>
         </div>
         <div class="row-bellow width-100 flex">
@@ -178,19 +254,37 @@
             <div class="text-modal">
               <b>Tài khoản ngân hàng</b>
             </div>
-            <input type="text" class="input-modal width-100" v-model="employee.AccountNumber"/>
+            <ValidationProvider rules="email" name="Email" v-slot="{ errors }">
+              <input
+                type="text"
+                class="input-modal width-100"
+                v-model="employee.AccountNumber"
+                :class="{
+                  'border-red': errors.length > 0 ? true : false,
+                }"
+              />
+              <span style="color: red">{{ errors[0] }}</span>
+            </ValidationProvider>
           </div>
           <div class="input pdr-8">
             <div class="text-modal">
               <b>Tên ngân hàng</b>
             </div>
-            <input type="text" class="input-modal width-100" v-model="employee.BankName"/>
+            <input
+              type="text"
+              class="input-modal width-100"
+              v-model="employee.BankName"
+            />
           </div>
           <div class="input pdr-8">
             <div class="text-modal">
               <b>Chi nhánh</b>
             </div>
-            <input type="text" class="input-modal width-100" v-model="employee.BranchName"/>
+            <input
+              type="text"
+              class="input-modal width-100"
+              v-model="employee.BranchName"
+            />
           </div>
         </div>
       </div>
@@ -201,7 +295,7 @@
           </button>
         </div>
         <div class="btn-save">
-          <button class="btn-white">
+          <button class="btn-white" @click="saveBtnClick">
             <div class="text-add">Cất</div>
           </button>
         </div>
@@ -243,7 +337,8 @@ export default {
      * Hàm check mode
      * CreateBy : LQNHAT(28/08/2021)
      */
-    show(mode,id) {
+    show(mode, id) {
+      this.mode = mode;
       this.employeeId = id;
       if (mode == 0) {
         this.employee = {};
@@ -251,6 +346,52 @@ export default {
       } else {
         this.bindDataToForm();
       }
+    },
+
+    /*--------------------------------------------------
+     * Hàm bắt sự kiện khi click btn Cất
+     * CreatedBy : LQNHAT(28/08/2021)
+     */
+    saveBtnClick() {
+      if (this.mode == 0) {
+        this.addEmployee();
+      } else {
+        this.editEmployee();
+      }
+    },
+
+    /*------------------------------------------------------------------------
+     * Hàm thêm mới nhân viên
+     * CreatedBy : LQNHAT(28/08/2021)
+     */
+    addEmployee() {
+      console.log("GENDER" + this.employee.Gender);
+      var self = this;
+      axios
+        .post(`https://localhost:44383/api/v1/employees`, self.employee)
+        .then((res) => {
+          console.log(res);
+          alert("Them thanh cong");
+        })
+        .catch((errror) => {
+          console.log(errror);
+        });
+    },
+
+    editEmployee() {
+      var self = this;
+      axios
+        .put(
+          `https://localhost:44383/api/v1/employees/${self.employeeId}`,
+          self.employee
+        )
+        .then((res) => {
+          console.log(res);
+          alert("Sua thanh cong");
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
 
     /**-----------------------------------------------------------------
