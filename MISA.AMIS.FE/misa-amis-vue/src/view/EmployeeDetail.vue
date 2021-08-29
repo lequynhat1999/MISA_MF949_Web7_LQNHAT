@@ -28,266 +28,279 @@
           >
         </div>
       </div>
-      <div class="content-modal">
-        <div class="row width-100 flex">
-          <div class="row-wrapper width-50 flex">
-            <div class="row-left width-100 flex">
-              <div class="input pdr-8 width-35">
-                <div class="text-modal">
-                  <b>Mã <span style="color: red">*</span></b>
+      <ValidationObserver ref="form_employee">
+        <div class="content-modal">
+          <div class="row width-100 flex">
+            <div class="row-wrapper width-50 flex">
+              <div class="row-left width-100 flex">
+                <div class="input pdr-8 width-35">
+                  <div class="text-modal">
+                    <b>Mã <span style="color: red">*</span></b>
+                  </div>
+                  <ValidationProvider
+                    rules="requiredCode"
+                    name="Mã"
+                    v-slot="{ errors }"
+                  >
+                    <input
+                      type="text"
+                      ref="txtEmployeeCode"
+                      v-model="employee.EmployeeCode"
+                      class="input-modal width-100"
+                      :class="{
+                        'border-red': errors.length > 0 ? true : false,
+                      }"
+                      :title="errors[0]"
+                    />
+                    <span style="color: red">{{ errors[0] }}</span>
+                  </ValidationProvider>
                 </div>
-                <ValidationProvider
-                  rules="required"
-                  name="Mã nhân viên"
-                  v-slot="{ errors }"
-                >
+                <div class="input width-60">
+                  <div class="text-modal">
+                    <b>Tên <span style="color: red">*</span></b>
+                  </div>
+                  <ValidationProvider
+                    rules="requiredName"
+                    name="Họ và tên"
+                    v-slot="{ errors }"
+                  >
+                    <input
+                      type="text"
+                      class="input-modal width-100"
+                      v-model="employee.FullName"
+                      :class="{
+                        'border-red': errors.length > 0 ? true : false,
+                      }"
+                      :title="errors[0]"
+                    />
+                    <span style="color: red">{{ errors[0] }}</span>
+                  </ValidationProvider>
+                </div>
+              </div>
+            </div>
+            <div class="row-wrapper width-50 flex">
+              <div class="row-left width-100 flex">
+                <div class="input width-35">
+                  <div class="text-modal">
+                    <b>Ngày sinh</b>
+                  </div>
+                  <input
+                    type="date"
+                    class="input-modal width-100"
+                    v-model="employee.DateOfBirth"
+                  />
+                </div>
+                <div class="input pdl-16 width-65">
+                  <div class="text-modal">
+                    <b>Giới tính</b>
+                  </div>
+                  <div class="value-gender flex">
+                    <input
+                      type="radio"
+                      id="Nam"
+                      name="gender"
+                      class="radio-gender"
+                      :checked="employee.GenderName == 'Nam' ? true : false"
+                      @click="employee.GenderName == 'Nam'"
+                    />
+                    <label for="Nam" class="text-radio">Nam</label>
+                    <input
+                      type="radio"
+                      id="Nữ"
+                      name="gender"
+                      class="radio-gender"
+                      :checked="employee.GenderName == 'Nữ' ? true : false"
+                      @click="employee.GenderName == 'Nữ'"
+                    />
+                    <label for="Nữ" class="text-radio">Nữ</label>
+                    <input
+                      type="radio"
+                      id="Khác"
+                      name="gender"
+                      class="radio-gender"
+                      :checked="
+                        employee.GenderName == 'Không xác định' ? true : false
+                      "
+                      @click="employee.GenderName == 'Không xác định'"
+                    />
+                    <label for="Khác" class="text-radio">Khác</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row-bellow width-100 flex">
+            <div class="row-wrapper width-50 flex">
+              <div class="row-left width-100 flex">
+                <div class="input width-95">
+                  <div class="text-modal">
+                    <b>Đơn vị <span style="color: red">*</span></b>
+                  </div>
                   <input
                     type="text"
-                    ref="txtEmployeeCode"
-                    v-model="employee.EmployeeCode"
                     class="input-modal width-100"
-                    :class="{
-                      'border-red': errors.length > 0 ? true : false,
-                    }"
+                    v-model="employee.DepartmentId"
                   />
-                  <span style="color: red">{{ errors[0] }}</span>
-                </ValidationProvider>
-              </div>
-              <div class="input width-60">
-                <div class="text-modal">
-                  <b>Tên <span style="color: red">*</span></b>
                 </div>
-                <ValidationProvider
-                  rules="required"
-                  
-                  name="Họ và tên"
-                  v-slot="{ errors }"
-                >
+              </div>
+            </div>
+            <div class="row-wrapper width-50 flex">
+              <div class="row-left width-100 flex">
+                <div class="input pdr-8 width-60">
+                  <div class="text-modal">
+                    <b>Số CMND </b>
+                  </div>
                   <input
                     type="text"
                     class="input-modal width-100"
-                    v-model="employee.FullName"
-                    :class="{
-                      'border-red': errors.length > 0 ? true : false,
-                    }"
+                    v-model="employee.IdentityNumber"
                   />
-                  <span style="color: red">{{ errors[0] }}</span>
-                </ValidationProvider>
-              </div>
-            </div>
-          </div>
-          <div class="row-wrapper width-50 flex">
-            <div class="row-left width-100 flex">
-              <div class="input width-35">
-                <div class="text-modal">
-                  <b>Ngày sinh</b>
                 </div>
-                <input
-                  type="date"
-                  class="input-modal width-100"
-                  v-model="employee.DateOfBirth"
-                />
-              </div>
-              <div class="input pdl-16 width-65">
-                <div class="text-modal">
-                  <b>Giới tính</b>
-                </div>
-                <div class="value-gender flex">
+                <div class="input width-35">
+                  <div class="text-modal">
+                    <b>Ngày cấp</b>
+                  </div>
                   <input
-                    type="radio"
-                    id="Nam"
-                    name="gender"
-                    class="radio-gender"
-                    :checked="employee.GenderName == 'Nam' ? true : false"
-                    @click="employee.Gender = 1"
+                    type="date"
+                    class="input-modal width-100"
+                    v-model="employee.IdentityDate"
                   />
-                  <label for="Nam" class="text-radio">Nam</label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row-bellow width-100 flex">
+            <div class="row-wrapper width-50 flex">
+              <div class="row-left width-100 flex">
+                <div class="input width-95">
+                  <div class="text-modal">
+                    <b>Chức danh</b>
+                  </div>
                   <input
-                    type="radio"
-                    id="Nữ"
-                    name="gender"
-                    class="radio-gender"
-                    :checked="employee.GenderName == 'Nữ' ? true : false"
-                    @click="employee.Gender = 0"
+                    type="text"
+                    class="input-modal width-100"
+                    v-model="employee.PositionName"
                   />
-                  <label for="Nữ" class="text-radio">Nữ</label>
+                </div>
+              </div>
+            </div>
+            <div class="row-wrapper width-50 flex">
+              <div class="row-left width-100 flex">
+                <div class="input width-95">
+                  <div class="text-modal">
+                    <b>Nơi cấp</b>
+                  </div>
                   <input
-                    type="radio"
-                    id="Khác"
-                    name="gender"
-                    class="radio-gender"
-                    :checked="
-                      employee.GenderName == 'Không xác định' ? true : false
-                    "
-                    @click="employee.Gender = 2"
+                    type="text"
+                    class="input-modal width-100"
+                    v-model="employee.IdentityPlace"
                   />
-                  <label for="Khác" class="text-radio">Khác</label>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-        <div class="row-bellow width-100 flex">
-          <div class="row-wrapper width-50 flex">
+          <div class="row-bellow pdt-16 width-100 flex">
             <div class="row-left width-100 flex">
-              <div class="input width-95">
+              <div class="input pdr-20 width-100">
                 <div class="text-modal">
-                  <b>Đơn vị <span style="color: red">*</span></b>
+                  <b>Địa chỉ</b>
                 </div>
                 <input
                   type="text"
                   class="input-modal width-100"
-                  v-model="employee.DepartmentId"
+                  v-model="employee.Address"
                 />
               </div>
             </div>
           </div>
-          <div class="row-wrapper width-50 flex">
-            <div class="row-left width-100 flex">
-              <div class="input pdr-8 width-60">
-                <div class="text-modal">
-                  <b>Số CMND </b>
-                </div>
-                <input
-                  type="text"
-                  class="input-modal width-100"
-                  v-model="employee.IdentityNumber"
-                />
-              </div>
-              <div class="input width-35">
-                <div class="text-modal">
-                  <b>Ngày cấp</b>
-                </div>
-                <input
-                  type="date"
-                  class="input-modal width-100"
-                  v-model="employee.IdentityDate"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="row-bellow width-100 flex">
-          <div class="row-wrapper width-50 flex">
-            <div class="row-left width-100 flex">
-              <div class="input width-95">
-                <div class="text-modal">
-                  <b>Chức danh</b>
-                </div>
-                <input
-                  type="text"
-                  class="input-modal width-100"
-                  v-model="employee.PositionName"
-                />
-              </div>
-            </div>
-          </div>
-          <div class="row-wrapper width-50 flex">
-            <div class="row-left width-100 flex">
-              <div class="input width-95">
-                <div class="text-modal">
-                  <b>Nơi cấp</b>
-                </div>
-                <input
-                  type="text"
-                  class="input-modal width-100"
-                  v-model="employee.IdentityPlace"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="row-bellow pdt-16 width-100 flex">
-          <div class="row-left width-100 flex">
-            <div class="input pdr-20 width-100">
+          <div class="row-bellow width-100 flex">
+            <div class="input pdr-8 width-25">
               <div class="text-modal">
-                <b>Địa chỉ</b>
+                <b>ĐT di động</b>
               </div>
               <input
                 type="text"
                 class="input-modal width-100"
-                v-model="employee.Address"
+                v-model="employee.PhoneNumber"
               />
             </div>
-          </div>
-        </div>
-        <div class="row-bellow width-100 flex">
-          <div class="input pdr-8">
-            <div class="text-modal">
-              <b>ĐT di động</b>
-            </div>
-            <input
-              type="text"
-              class="input-modal width-100"
-              v-model="employee.PhoneNumber"
-            />
-          </div>
-          <div class="input pdr-8">
-            <div class="text-modal">
-              <b>ĐT cố định</b>
-            </div>
-            <input
-              type="text"
-              class="input-modal width-100"
-              v-model="employee.HotLine"
-            />
-          </div>
-          <div class="input pdr-8">
-            <div class="text-modal">
-              <b>Email</b>
-            </div>
-            <ValidationProvider rules="email" name="Email" v-slot="{ errors }">
+            <div class="input pdr-8 width-25">
+              <div class="text-modal">
+                <b>ĐT cố định</b>
+              </div>
               <input
                 type="text"
                 class="input-modal width-100"
-                v-model="employee.Email"
-                :class="{
-                  'border-red': errors.length > 0 ? true : false,
-                }"
+                v-model="employee.Hotline"
               />
-              <span style="color: red">{{ errors[0] }}</span>
-            </ValidationProvider>
-          </div>
-        </div>
-        <div class="row-bellow width-100 flex">
-          <div class="input pdr-8">
-            <div class="text-modal">
-              <b>Tài khoản ngân hàng</b>
             </div>
-            <ValidationProvider rules="email" name="Email" v-slot="{ errors }">
+            <div class="input pdr-8 width-25">
+              <div class="text-modal">
+                <b>Email</b>
+              </div>
+              <ValidationProvider
+                rules="checkEmail"
+                name="Email"
+                v-slot="{ errors }"
+              >
+                <input
+                  type="text"
+                  class="input-modal width-100"
+                  v-model="employee.Email"
+                  :class="{
+                    'border-red': errors.length > 0 ? true : false,
+                  }"
+                  :title="errors[0]"
+                />
+                <span style="color: red">{{ errors[0] }}</span>
+              </ValidationProvider>
+            </div>
+          </div>
+          <div class="row-bellow width-100 flex">
+            <div class="input pdr-8 width-25">
+              <div class="text-modal">
+                <b>Tài khoản ngân hàng</b>
+              </div>
+              <ValidationProvider
+                rules="numeric"
+                name="Tài khoản ngân hàng"
+                v-slot="{ errors }"
+              >
+                <input
+                  type="text"
+                  class="input-modal width-100"
+                  v-model="employee.AccountNumber"
+                  :class="{
+                    'border-red': errors.length > 0 ? true : false,
+                  }"
+                  :title="errors[0]"
+                />
+                <span style="color: red">{{ errors[0] }}</span>
+              </ValidationProvider>
+            </div>
+            <div class="input pdr-8 width-25">
+              <div class="text-modal">
+                <b>Tên ngân hàng</b>
+              </div>
               <input
                 type="text"
                 class="input-modal width-100"
-                v-model="employee.AccountNumber"
-                :class="{
-                  'border-red': errors.length > 0 ? true : false,
-                }"
+                v-model="employee.BankName"
               />
-              <span style="color: red">{{ errors[0] }}</span>
-            </ValidationProvider>
-          </div>
-          <div class="input pdr-8">
-            <div class="text-modal">
-              <b>Tên ngân hàng</b>
             </div>
-            <input
-              type="text"
-              class="input-modal width-100"
-              v-model="employee.BankName"
-            />
-          </div>
-          <div class="input pdr-8">
-            <div class="text-modal">
-              <b>Chi nhánh</b>
+            <div class="input pdr-8 width-25">
+              <div class="text-modal">
+                <b>Chi nhánh</b>
+              </div>
+              <input
+                type="text"
+                class="input-modal width-100"
+                v-model="employee.BranchName"
+              />
             </div>
-            <input
-              type="text"
-              class="input-modal width-100"
-              v-model="employee.BranchName"
-            />
           </div>
         </div>
-      </div>
+      </ValidationObserver>
       <div class="paging-modal flex">
         <div class="btn-cancel-modal">
           <button class="btn-white" @click="closeModal">
@@ -300,11 +313,12 @@
           </button>
         </div>
         <div class="btn-save-add">
-          <button class="m-btn">
+          <button class="m-btn" @click="saveAddBtnClick">
             <div class="text-add">Cất và thêm</div>
           </button>
         </div>
       </div>
+      <PopupConfirmSave />
     </div>
   </div>
 </template>
@@ -312,16 +326,43 @@
 <script>
 import axios from "axios";
 import moment from "moment";
+import { extend } from "vee-validate";
+import { required, email } from "vee-validate/dist/rules";
+import PopupConfirmSave from "../components/base/BasePopupConfirmSave.vue";
+
+// custom rule required code
+extend("requiredCode", {
+  ...required,
+  message: "Mã không được để trống",
+});
+
+// custom rule required fullname
+extend("requiredName", {
+  ...required,
+  message: "Họ và tên không được để trống",
+});
+
+// custom rule check email
+extend("checkEmail", {
+  ...email,
+  message: "Email không đúng định dạng",
+});
+
 export default {
   name: "EmployeeDetail",
+  components: {
+    PopupConfirmSave,
+  },
   props: ["isOpenModal"],
   data() {
     return {
       // object nhân viên
       employee: {},
+      // Id của nhân viên
       employeeId: "",
       // mode cho modal : 0 là add - 1 là edit
       mode: 0,
+      newEmployeeCode: "",
     };
   },
   methods: {
@@ -330,20 +371,29 @@ export default {
      * CreatedBy: LQNHAT(28/08/2021)
      */
     closeModal() {
-      this.$emit("openModal");
+      this.$emit("closeForm");
+      this.$refs.form_employee.reset();
     },
 
     /**--------------------------------------------
      * Hàm check mode
      * CreateBy : LQNHAT(28/08/2021)
      */
-    show(mode, id) {
+    show(mode, id, employee) {
       this.mode = mode;
       this.employeeId = id;
+      this.employee = employee;
       if (mode == 0) {
         this.employee = {};
         this.autoNewEmployeeCode();
-      } else {
+      }
+      //  else if (mode == 2) {
+      //   this.employee.EmployeeCode = "";
+      //   this.employee.EmployeeId = "";
+      //   this.autoNewEmployeeCode();
+      //   alert(this.employee.EmployeeCode);
+      // } 
+      else {
         this.bindDataToForm();
       }
     },
@@ -353,11 +403,52 @@ export default {
      * CreatedBy : LQNHAT(28/08/2021)
      */
     saveBtnClick() {
-      if (this.mode == 0) {
-        this.addEmployee();
-      } else {
-        this.editEmployee();
-      }
+      this.$refs.form_employee.validate().then((success) => {
+        if (!success) {
+          return;
+        }
+        if (this.mode == 0) {
+          //add nv
+          this.addEmployee();
+          this.employee = {};
+          this.$emit("closeForm");
+          this.$refs.form_employee.reset();
+        } else {
+          //edit nv
+          this.editEmployee();
+          this.$emit("closeForm");
+          this.$refs.form_employee.reset();
+        }
+      });
+    },
+
+    /**-----------------------------------------------------------
+     * Bắt sự kiện nút cất và thêm
+     * CreatedBy: LQNHAT(29/08/2021)
+     */
+    saveAddBtnClick() {
+      this.$refs.form_employee.validate().then((success) => {
+        if (!success) {
+          return;
+        }
+        if (this.mode == 0) {
+          //add nv
+          this.addEmployee();
+          this.$refs.form_employee.reset();
+          this.employee = {};
+          this.autoNewEmployeeCode();
+          this.mode = 0;
+          debugger; // eslint-disable-line
+        } else {
+          //edit nv
+          this.editEmployee();
+          this.$refs.form_employee.reset();
+          this.employee = {};
+          this.autoNewEmployeeCode();
+          this.mode = 0;
+          debugger; // eslint-disable-line
+        }
+      });
     },
 
     /*------------------------------------------------------------------------
@@ -365,13 +456,15 @@ export default {
      * CreatedBy : LQNHAT(28/08/2021)
      */
     addEmployee() {
-      console.log("GENDER" + this.employee.Gender);
       var self = this;
       axios
         .post(`https://localhost:44383/api/v1/employees`, self.employee)
         .then((res) => {
           console.log(res);
-          alert("Them thanh cong");
+          self.$emit("reloadTableAndFilter");
+          this.$toast.success("Thêm mới nhân viên thành công", {
+            timeout: 2000,
+          });
         })
         .catch((errror) => {
           console.log(errror);
@@ -387,7 +480,10 @@ export default {
         )
         .then((res) => {
           console.log(res);
-          alert("Sua thanh cong");
+          self.$emit("reloadTableAndFilter");
+          this.$toast.success("Sửa thông tin nhân viên thành công", {
+            timeout: 2000,
+          });
         })
         .catch((error) => {
           console.log(error);
@@ -406,7 +502,11 @@ export default {
           let newEmployee = {};
           newEmployee.EmployeeCode = res.data;
           self.employee = newEmployee;
-          self.$refs.txtEmployeeCode.focus();
+
+          // this.newEmployeeCode = res.data;
+          // self.employee.EmployeeCode = this.newEmployeeCode;
+          // self.$refs.txtEmployeeCode.focus();
+          debugger; // eslint-disable-line
         })
         .catch((err) => {
           console.log(err);
@@ -424,11 +524,10 @@ export default {
         .get(`https://localhost:44383/api/v1/employees/${self.employeeId}`)
         .then((res) => {
           self.employee = res.data;
-          // format salary,date về đúng định dạng
+          // format date về đúng định dạng
           self.employee.DateOfBirth = self.formatDate(res.data.DateOfBirth);
           self.employee.IdentityDate = self.formatDate(res.data.IdentityDate);
           console.log(res.data);
-          debugger; // eslint-disable-line
         })
         .catch((error) => {
           console.log(error);

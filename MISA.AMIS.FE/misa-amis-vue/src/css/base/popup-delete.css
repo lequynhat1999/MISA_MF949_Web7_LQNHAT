@@ -1,0 +1,25 @@
+.img-confirm-delete {
+  background: url("../../assets/img/Sprites.64af8f61.svg") no-repeat -592px -456px;
+  width: 48px;
+  height: 48px;
+  margin-top: 6px;
+  margin-left: 2px;
+}
+
+.modal-confirm-delete {
+    position: fixed;
+    z-index: 5;
+    padding-top: 220px;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0, 0, 0);
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.hidden-delete
+{
+    display: none;
+}

@@ -5,6 +5,16 @@ import VueAxios from 'vue-axios'
 import { ValidationProvider, ValidationObserver, extend } from 'vee-validate'; 
 import * as rules from 'vee-validate/dist/rules';
 import { messages } from 'vee-validate/dist/locale/vi.json';
+import Toast from "vue-toastification";
+import "vue-toastification/dist/index.css";
+
+const options = {
+  // You can set your default options here
+  position: 'bottom-right'
+};
+
+
+Vue.use(Toast, options);
 
 Object.keys(rules).forEach(rule => {
   extend(rule, {

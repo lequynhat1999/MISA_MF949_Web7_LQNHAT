@@ -181,14 +181,21 @@ namespace MISA.AMIS.Core.Services
             {
                 // Check định dạng email
                 var emailFormat = @"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?";
-                var isMatch = Regex.IsMatch((string)propValue, emailFormat, RegexOptions.IgnoreCase);
-                if (isMatch == false)
+                if (!string.IsNullOrEmpty(propValue.ToString()))
                 {
-                    isValid = false;
-                    messageArr.Add(string.Format(Resources.ResourceVnEmployee.Error_EmailFormat, fieldName));
-                    _serviceResult.MISACode = MISAEnum.EnumServiceResult.BadRequest;
-                    _serviceResult.Message = Resources.ResourceVnEmployee.Error_Validate;
-                }
+                    var isMatch = Regex.IsMatch((string)propValue, emailFormat, RegexOptions.IgnoreCase);
+                    if (isMatch == false)
+                    {
+                        isValid = false;
+                        messageArr.Add(string.Format(Resources.ResourceVnEmployee.Error_EmailFormat, fieldName));
+                        _serviceResult.MISACode = MISAEnum.EnumServiceResult.BadRequest;
+                        _serviceResult.Message = Resources.ResourceVnEmployee.Error_Validate;
+                    }
+                    else
+                    {
+                        return isValid;
+                    }
+                };
             }
             return isValid;
         }

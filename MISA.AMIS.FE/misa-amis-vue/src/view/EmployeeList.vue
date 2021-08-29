@@ -67,32 +67,26 @@
             <td>{{ employee.BankName }}</td>
             <td>{{ employee.BranchName }}</td>
             <td>
-              <!-- div bao quanh chức năng  -->
               <div class="option-wrapper flex">
-                <!-- nút sửa -->
                 <div class="btn-edit" @click="rowClick(employee.EmployeeId)">
                   Sửa
                 </div>
-                <!-- div bao quanh option -->
                 <div
                   class="box-option"
-                  :class="{ 'border-box': !isHiddenOption }"
+                  :class="{ 'border-box': employee.Option}"
                 >
-                <!-- icon option -->
-                  <div class="btn-option" @click="btnOptionClick()"></div>
-                  <!-- dropdown-option -->
-                  <div
+                  <div class="btn-option" @click="isHiddenOption = !isHiddenOption; employee.Option = !employee.Option"></div>
+                </div>
+                <div
                     class="dropdown-option"
-                    :class="{ 'option-hidden': isHiddenOption }"
-                    @click="btnOptionClick()"
+                    v-if="!isHiddenOption && employee.Option"
                   >
-                  <!-- option-item -->
-                    <div class="option-item">Nhân bản</div>
-                    <div class="option-item">Xóa</div>
+                    <div class="option-item" @click="cloneEmployee(employee)">Nhân bản</div>
+                    <div class="option-item" @click="deleteEmployee(employee)">Xóa</div>
                     <div class="option-item">Ngừng sử dụng</div>
                   </div>
-                </div>
               </div>
+              
             </td>
           </tr>
           <tr v-if="employees.length == 0 ? true : false">
@@ -125,11 +119,16 @@
     </div>
     <EmployeeDetail
       :isOpenModal="isOpenModal"
-      @openModal="openModal"
       ref="modeForm"
       :mode="modeFormDetail"
+      @closeForm="closeForm"
+      @reloadTableAndFilter="reloadTableAndFilter"
     />
     <Loading :isLoading="isLoading" />
+    <PopupDelete
+      ref="popupDelete"
+      @reloadTableAndFilter="reloadTableAndFilter"
+    />
   </div>
 </template>
 
@@ -138,6 +137,7 @@ import BaseTitle from "../components/base/BaseTitle.vue";
 import EmployeeDetail from "./EmployeeDetail.vue";
 import Dropdown from "../components/base/BaseDropdown.vue";
 import Loading from "../components/base/BaseLoading.vue";
+import PopupDelete from "../components/base/BasePoupDelete.vue";
 import axios from "axios";
 import moment from "moment";
 export default {
@@ -146,6 +146,7 @@ export default {
     EmployeeDetail,
     Dropdown,
     Loading,
+    PopupDelete
   },
   data() {
     return {
@@ -175,6 +176,8 @@ export default {
       employee: {},
       // mảng các object nhân viên
       employees: [],
+      // id của nhân viên
+      employeeId: "",
       // mode form detail: 0 là add, 1 là edit
       modeFormDetail: 0,
       // hidden option
@@ -202,6 +205,9 @@ export default {
         )
         .then((res) => {
           self.employees = res.data.Data;
+          self.employees.forEach(employee => {
+            employee.Option = false;
+          });
           self.amountPage = res.data.TotalRecord;
           self.numPages = res.data.TotalPage;
           self.isLoading = false;
@@ -238,6 +244,25 @@ export default {
         });
     },
 
+    /**---------------------------------------------------------
+     * Hàm bắt sự kiện xóa nhân viên
+     * CreatedBy: LQNHAT(29/08/2021)
+     */
+    deleteEmployee(employee)
+    {
+      this.$refs.popupDelete.openPopupDelete(employee);
+    },
+
+    /**-----------------------------------------------------------------
+     * Hàm bắt sự kiện nhân bản nhân viên
+     * CreatedBy: LQNHAT(29/08/2021)
+     */
+    cloneEmployee(employee)
+    {
+      this.employeeId = employee.EmployeeId;
+      this.isOpenModal = !this.isOpenModal;
+    },
+
     /**
      * Set value deafault cho dropdown paging
      */
@@ -272,12 +297,13 @@ export default {
       this.$refs.modeForm.show(this.modeFormDetail);
     },
 
-    /**-----------------------------------------------------
-     * Bắt sự kiện mở các option
-     * CreatedBy: LQNHAT(28/08/2021)
+    /**---------------------------------------------------------
+     * Bắt sự kiện đóng form chi tiết
+     * CreatedBy : LQNHAT(28/08/2021)
      */
-    btnOptionClick() {
-      this.isHiddenOption = !this.isHiddenOption;
+    closeForm()
+    {
+      this.isOpenModal = true;
     },
 
     /**---------------------------------------------------
@@ -288,7 +314,6 @@ export default {
       this.isOpenModal = !this.isOpenModal;
       this.modeFormDetail = 1;
       this.$refs.modeForm.show(this.modeFormDetail, employeeId);
-      debugger; // eslint-disable-line
     },
 
     /**--------------------------------------------------
@@ -322,4 +347,6 @@ export default {
 @import "../css/employee/detail.css";
 @import "../css/base/width-input.css";
 @import "../css/base/dropdown.css";
+@import "../css/base/popup-confirm-save.css";
+@import "../css/base/popup-delete.css";
 </style>

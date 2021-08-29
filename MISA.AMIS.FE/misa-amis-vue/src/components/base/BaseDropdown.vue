@@ -150,7 +150,6 @@ export default {
       this.selectedValue = this.items[0].Value;
       this.currentIndex = 0;
       this.$emit("setValueDefaultDropdown",this.selectedValue);
-      debugger; // eslint-disable-line
     },
 
     /**----------------------------------------------------------------------

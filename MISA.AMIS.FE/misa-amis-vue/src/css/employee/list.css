@@ -79,24 +79,19 @@
   margin-left: 30px;
 }
 
-/* css cho div bao quanh option */
 .box-option
 {
-  position: relative;
   width: 28px;
   height: 18px;
   margin: auto auto;
   margin-right: 30px;
-  z-index: 2;
 }
 
-/* border cho div bao quanh option */
 .border-box
 {
   border: 1px solid #0075c0;
 }
 
-/* icon option */
 .btn-option {
   background: url("../../assets/img/Sprites.64af8f61.svg") no-repeat -896px -359px;
   width: 12px;
@@ -104,24 +99,18 @@
   margin-right: 10px;
 }
 
-.option-hidden {
-  display: none;
-}
-
-/* css cho dropdown-option */
 .dropdown-option {
   position: absolute;
-  top: 20px;
-  right: 0px;
+  z-index: 999;
+  top: 10px;
+  right:60px;
   width: 104px;
   height: 84px;
-  z-index: 999;
   border: 1px solid #babec5;
   border-radius: 2px;
   background: #fff;
 }
 
-/* css cho option-item */
 .option-item {
   display: block;
   height: 28px;
@@ -135,3 +124,4 @@
   background-color: #e9ebee;
   color: #2ca01c;
 }
+
