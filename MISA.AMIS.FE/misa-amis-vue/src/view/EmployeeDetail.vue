@@ -100,8 +100,8 @@
                       id="Nam"
                       name="gender"
                       class="radio-gender"
-                      :checked="employee.GenderName == 'Nam' ? true : false"
-                      @click="employee.Gender = 1"
+                      v-model="employee.Gender"
+                      value="1"
                     />
                     <label for="Nam" class="text-radio">Nam</label>
                     <input
@@ -109,8 +109,8 @@
                       id="Nữ"
                       name="gender"
                       class="radio-gender"
-                      :checked="employee.GenderName == 'Nữ' ? true : false"
-                      @click="employee.Gender = 0"
+                      v-model="employee.Gender"
+                      value="0"
                     />
                     <label for="Nữ" class="text-radio">Nữ</label>
                     <input
@@ -118,8 +118,8 @@
                       id="Khác"
                       name="gender"
                       class="radio-gender"
-                      :checked="employee.GenderName == 'Không xác định' ? true : false"
-                      @click="employee.Gender = 2"
+                      v-model="employee.Gender"
+                      value="2"
                     />
                     <label for="Khác" class="text-radio">Khác</label>
                   </div>
@@ -491,6 +491,7 @@ export default {
       // this.employee.EmployeeId = null;
       this.autoNewEmployeeCode();
       this.mode = 0;
+      this.employee.EmployeeId = '00000000-0000-0000-0000-000000000000';
       console.log("employeeId" + this.employee.EmployeeId);
     },
 
@@ -595,6 +596,7 @@ export default {
           this.$toast.success("Thêm mới nhân viên thành công", {
             timeout: 2000,
           });
+          this.employee ={};
           this.autoNewEmployeeCode();
         })
         .catch((errror) => {

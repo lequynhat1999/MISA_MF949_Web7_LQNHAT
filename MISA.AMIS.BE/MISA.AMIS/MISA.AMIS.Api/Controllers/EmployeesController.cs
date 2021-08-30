@@ -117,13 +117,14 @@ namespace MISA.AMIS.Api.Controllers
                 {
                     // xóa file cũ nếu đã tồn tại
                     file.Delete();
+                    // khởi tạo ra file mới tên là danh_sach_nhan_vien
                     file = new FileInfo(Path.Combine(folder, "Danh_sach_nhan_vien.xlsx"));
                 }
 
                 var serviceResult = _employeeService.ExportEmployees(folder);
                 if (serviceResult.MISACode == Core.MISAEnum.EnumServiceResult.Success)
                 {
-                    return StatusCode(200, serviceResult);
+                    return StatusCode(200, serviceResult.Message);
                 }
                 else
                 {

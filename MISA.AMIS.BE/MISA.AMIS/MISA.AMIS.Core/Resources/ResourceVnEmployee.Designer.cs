@@ -196,6 +196,15 @@ namespace MISA.AMIS.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Xuất khẩu dữ liệu thành công.
+        /// </summary>
+        public static string Success_Export_Employee {
+            get {
+                return ResourceManager.GetString("Success_Export_Employee", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Mã nhân viên đã tồn tại.
         /// </summary>
         public static string User_ErrorMsg_Check_EmployeeCode {

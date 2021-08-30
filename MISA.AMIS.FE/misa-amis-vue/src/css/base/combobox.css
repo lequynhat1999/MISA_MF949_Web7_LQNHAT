@@ -72,7 +72,7 @@
   cursor: pointer;
 }
 
-.combobox-data table tbody div tr:hover {
+.combobox-data table tbody tr:hover {
   color: #35bf22;
   background-color: #ebedf0;
 }

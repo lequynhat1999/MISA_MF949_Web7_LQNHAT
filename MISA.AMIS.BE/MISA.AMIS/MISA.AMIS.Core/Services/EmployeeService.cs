@@ -27,11 +27,22 @@ namespace MISA.AMIS.Core.Services
             _employeeRepository = employeeRepository;
         }
 
+
+
+
+        #endregion
+
+        #region Methods
+        /// <summary>
+        /// Xuất khẩu dữ liệu nhân viên
+        /// </summary>
+        /// <param name="folder">folder chứa dữ liệu xuất khẩu</param>
+        /// <returns>ServiceResult - lưu trạng thái kết quả sau khi xử lý nghiệp vụ và thao tác với db</returns>
+        /// CreatedBy: LQNHAT(28/08/2021)
         public ServiceResult ExportEmployees(string folder)
         {
             try
             {
-
                 // tạo file với đường dẫn wwwroot, tên là danh_sach_nhan_vien
                 var file = new FileInfo(Path.Combine(folder, "Danh_sach_nhan_vien.xlsx"));
 
@@ -49,17 +60,17 @@ namespace MISA.AMIS.Core.Services
                     workSheet.Cells["A1:I1"].Style.Font.Bold = true;
                     workSheet.Cells["A2:I2"].Merge = true;
 
-                    // tiêu đề bảng excel
+                    // custom thead bảng excel
                     workSheet.Row(3).Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                     workSheet.Row(3).Style.Font.Bold = true;
                     workSheet.Row(3).Style.Font.Name = "Arial";
                     workSheet.Row(3).Style.Font.Size = 10;
 
-                    // đổ màu cho tiêu đề
+                    // set color cho thead
                     workSheet.Cells["A3:I3"].Style.Fill.PatternType = ExcelFillStyle.Solid;
                     workSheet.Cells["A3:I3"].Style.Fill.BackgroundColor.SetColor(System.Drawing.ColorTranslator.FromHtml("#d8d8d8"));
 
-                    // tiêu đề 
+                    // thead
                     workSheet.Cells[3, 1].Value = "STT";
                     workSheet.Cells[3, 2].Value = "Mã nhân viên";
                     workSheet.Cells[3, 3].Value = "Tên nhân viên";
@@ -72,40 +83,38 @@ namespace MISA.AMIS.Core.Services
 
                     // lấy danh sách nhân viên
                     var employees = _employeeRepository.Get();
-                    // bắt đầu từ hàng thứ 4
                     int row = 4;
-                    // số thứ tự
                     int count = 1;
-                    // duyệt thông tin vào ô trong file excel
                     foreach (var employee in employees)
                     {
-                        // value các trường thông tin
+                        // bind data lên column
                         workSheet.Cells[row, 1].Value = count;
                         workSheet.Cells[row, 2].Value = employee.EmployeeCode;
                         workSheet.Cells[row, 3].Value = employee.FullName;
                         workSheet.Cells[row, 4].Value = employee.GenderName;
-                        workSheet.Cells[row, 5].Value = employee.DateOfBirth == null ? "" : DateTime.Now.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture);
+                        //workSheet.Cells[row, 5].Value = employee.DateOfBirth == null ? "" : DateTime.Now.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture);
+                        workSheet.Cells[row, 5].Value = employee.DateOfBirth;
                         workSheet.Cells[row, 6].Value = employee.PositionName;
                         workSheet.Cells[row, 7].Value = employee.DepartmentName;
                         workSheet.Cells[row, 8].Value = employee.AccountNumber;
                         workSheet.Cells[row, 9].Value = employee.BankName;
 
-                        // style cho cột STT và cột ngày sinh
+                        // custom column stt và column dob
                         workSheet.Cells[row, 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
                         workSheet.Cells[row, 5].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
 
-                        // style cho các dòng trong file
+                        // custom cỡ chữ cho row
                         workSheet.Row(row).Style.Font.Name = "Times New Roman";
                         workSheet.Row(row).Style.Font.Size = 11;
                         row++;
                         count++;
                     }
 
-                    // tính length của file excel
+                    // length file excel
                     string modelRange = "A3:I" + (employees.Count() + 3).ToString();
                     var modelTable = workSheet.Cells[modelRange];
 
-                    // Thêm viền cho các ô
+                    // thêm border
                     modelTable.Style.Border.Top.Style = ExcelBorderStyle.Thin;
                     modelTable.Style.Border.Left.Style = ExcelBorderStyle.Thin;
                     modelTable.Style.Border.Right.Style = ExcelBorderStyle.Thin;
@@ -124,6 +133,7 @@ namespace MISA.AMIS.Core.Services
                     package.Save();
                 }
                 _serviceResult.MISACode = MISAEnum.EnumServiceResult.Success;
+                _serviceResult.Message = Resources.ResourceVnEmployee.Success_Export_Employee;
                 return _serviceResult;
             }
             catch (Exception ex)
@@ -131,7 +141,7 @@ namespace MISA.AMIS.Core.Services
                 var msg = new
                 {
                     devMsg = ex.Message,
-                    userMsg = "Có lỗi xảy ra",
+                    userMsg = Resources.ResourceVnEmployee.Exception_ErrorMsg,
                 };
                 _serviceResult.Data = msg;
                 _serviceResult.MISACode = MISAEnum.EnumServiceResult.InternalServerError;
@@ -140,9 +150,6 @@ namespace MISA.AMIS.Core.Services
         }
 
 
-        #endregion
-
-        #region Methods
 
         #endregion
     }

@@ -68,6 +68,11 @@
   background-color: #e6e6e6;
 }
 
+.option-wrapper
+{
+  position: relative;
+}
+
 .btn-edit,
 .btn-option {
   margin: auto auto;
@@ -108,7 +113,7 @@
   height: 84px;
   border: 1px solid #babec5;
   border-radius: 2px;
-  background: #fff;
+  background-color: #fff;
 }
 
 .option-item {

@@ -5,11 +5,11 @@
   overflow-y: scroll;
   height: calc(100vh - 257px);
 }
-.table-employee thead
+/* .table-employee thead
 {
   position: relative;
   z-index: 4;
-}
+} */
 
 .table-employee tr{
   position: relative;

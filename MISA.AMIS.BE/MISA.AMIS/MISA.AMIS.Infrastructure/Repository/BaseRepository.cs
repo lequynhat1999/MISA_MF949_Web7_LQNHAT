@@ -58,7 +58,7 @@ namespace MISA.AMIS.Infrastructure.Repository
                 if (propertyAttrNotMap.Length == 0)
                 {
                     var propName = prop.Name;
-                    var propValue = prop.GetValue(entity);
+                    var propValue = prop.GetValue(entity) == "" ? null : prop.GetValue(entity);
                     // sinh mã mới
                     if (propName == $"{_tableName}Id" && prop.PropertyType == typeof(Guid))
                     {

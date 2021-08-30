@@ -94,7 +94,7 @@ namespace MISA.AMIS.Core.Services
             foreach (var prop in properties)
             {
                 var propName = prop.Name;
-                var propValue = prop.GetValue(entity);
+                var propValue = prop.GetValue(entity) == null ? null : prop.GetValue(entity);
 
                 // lấy ra name của property
                 var attrNames = prop.GetCustomAttributes(typeof(Name), true);
@@ -179,10 +179,10 @@ namespace MISA.AMIS.Core.Services
         {
             if (prop.IsDefined(typeof(CheckEmail), false))
             {
-                // Check định dạng email
-                var emailFormat = @"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?";
-                if (!string.IsNullOrEmpty(propValue.ToString()))
+                if (propValue != null)
                 {
+                    // Check định dạng email
+                    var emailFormat = @"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?";
                     var isMatch = Regex.IsMatch((string)propValue, emailFormat, RegexOptions.IgnoreCase);
                     if (isMatch == false)
                     {
@@ -195,7 +195,7 @@ namespace MISA.AMIS.Core.Services
                     {
                         return isValid;
                     }
-                };
+                }
             }
             return isValid;
         }
