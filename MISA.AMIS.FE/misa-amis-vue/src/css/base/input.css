@@ -90,5 +90,5 @@ input[type='radio']:checked:after {
 
 .border-red
 {
-  border: 1px solid red ;
+  border: 1px solid red  !important;
 }

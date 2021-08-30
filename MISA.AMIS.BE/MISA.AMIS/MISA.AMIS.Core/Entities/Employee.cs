@@ -13,6 +13,7 @@ namespace MISA.AMIS.Core.Entities
         /// </summary>
         /// CreatedBy : LQNHAT(27/08/2021)
         [CheckExist]
+        [Name("ID nhân viên")]
         public Guid EmployeeId { get; set; }
 
         /// <summary>
@@ -56,7 +57,6 @@ namespace MISA.AMIS.Core.Entities
         /// Số chứng minh thư
         /// </summary>
         /// CreatedBy : LQNHAT(27/08/2021)
-        [CheckExist]
         [Name("Số chứng minh thư")]
         public string IdentityNumber { get; set; }
 

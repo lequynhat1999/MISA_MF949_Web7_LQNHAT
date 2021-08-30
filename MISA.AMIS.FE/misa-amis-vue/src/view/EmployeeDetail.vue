@@ -2,7 +2,7 @@
   <div id="myModal" class="modal" :class="{ 'hidden-modal': isOpenModal }">
     <div class="modal-content">
       <div class="btn-top">
-        <div class="btn-close" title="Đóng(ESC)" @click="closeModal"></div>
+        <div class="btn-close" title="Đóng(ESC)" @click="closeFormDetail"></div>
         <div class="btn-help" title="Giúp(F1)"></div>
       </div>
       <div class="header-modal">
@@ -39,7 +39,7 @@
                   </div>
                   <ValidationProvider
                     rules="requiredCode"
-                    name="Mã"
+                    name="Code"
                     v-slot="{ errors }"
                   >
                     <input
@@ -52,7 +52,7 @@
                       }"
                       :title="errors[0]"
                     />
-                    <span style="color: red">{{ errors[0] }}</span>
+                    <!-- <span style="color: red">{{ errors[0] }}</span> -->
                   </ValidationProvider>
                 </div>
                 <div class="input width-60">
@@ -61,7 +61,7 @@
                   </div>
                   <ValidationProvider
                     rules="requiredName"
-                    name="Họ và tên"
+                    name="Name"
                     v-slot="{ errors }"
                   >
                     <input
@@ -73,7 +73,7 @@
                       }"
                       :title="errors[0]"
                     />
-                    <span style="color: red">{{ errors[0] }}</span>
+                    <!-- <span style="color: red">{{ errors[0] }}</span> -->
                   </ValidationProvider>
                 </div>
               </div>
@@ -101,7 +101,7 @@
                       name="gender"
                       class="radio-gender"
                       :checked="employee.GenderName == 'Nam' ? true : false"
-                      @click="employee.GenderName == 'Nam'"
+                      @click="employee.Gender = 1"
                     />
                     <label for="Nam" class="text-radio">Nam</label>
                     <input
@@ -110,7 +110,7 @@
                       name="gender"
                       class="radio-gender"
                       :checked="employee.GenderName == 'Nữ' ? true : false"
-                      @click="employee.GenderName == 'Nữ'"
+                      @click="employee.Gender = 0"
                     />
                     <label for="Nữ" class="text-radio">Nữ</label>
                     <input
@@ -118,10 +118,8 @@
                       id="Khác"
                       name="gender"
                       class="radio-gender"
-                      :checked="
-                        employee.GenderName == 'Không xác định' ? true : false
-                      "
-                      @click="employee.GenderName == 'Không xác định'"
+                      :checked="employee.GenderName == 'Không xác định' ? true : false"
+                      @click="employee.Gender = 2"
                     />
                     <label for="Khác" class="text-radio">Khác</label>
                   </div>
@@ -136,11 +134,23 @@
                   <div class="text-modal">
                     <b>Đơn vị <span style="color: red">*</span></b>
                   </div>
-                  <input
-                    type="text"
-                    class="input-modal width-100"
-                    v-model="employee.DepartmentId"
-                  />
+                  <ValidationProvider
+                    rules="requiredDepartment"
+                    name="Department"
+                    v-slot="{ errors }"
+                  >
+                    <Combobox
+                      style="border-radius: 4px"
+                      class="width-100"
+                      :class="{
+                        'border-red': errors.length > 0 ? true : false,
+                      }"
+                      @selectedDepartment="getValueDepartment"
+                      :value="employee.DepartmentId"
+                      :title="errors[0]"
+                    />
+                    <!-- <span style="color: red">{{ errors[0] }}</span> -->
+                  </ValidationProvider>
                 </div>
               </div>
             </div>
@@ -252,7 +262,7 @@
                   }"
                   :title="errors[0]"
                 />
-                <span style="color: red">{{ errors[0] }}</span>
+                <!-- <span style="color: red">{{ errors[0] }}</span> -->
               </ValidationProvider>
             </div>
           </div>
@@ -262,8 +272,8 @@
                 <b>Tài khoản ngân hàng</b>
               </div>
               <ValidationProvider
-                rules="numeric"
-                name="Tài khoản ngân hàng"
+                rules="numericAccount"
+                name="AccountNumber"
                 v-slot="{ errors }"
               >
                 <input
@@ -275,7 +285,7 @@
                   }"
                   :title="errors[0]"
                 />
-                <span style="color: red">{{ errors[0] }}</span>
+                <!-- <span style="color: red">{{ errors[0] }}</span> -->
               </ValidationProvider>
             </div>
             <div class="input pdr-8 width-25">
@@ -318,7 +328,16 @@
           </button>
         </div>
       </div>
-      <PopupConfirmSave />
+      <PopupConfirmSave
+        ref="popupConfirmSave"
+        @closeModal="closeModal"
+        @saveBtnClick="saveBtnClick"
+      />
+      <PopupWarning
+        :isHiddenWarning="isHiddenWarning"
+        :textError="textError"
+        @closeWarning="closeWarning"
+      />
     </div>
   </div>
 </template>
@@ -327,8 +346,10 @@
 import axios from "axios";
 import moment from "moment";
 import { extend } from "vee-validate";
-import { required, email } from "vee-validate/dist/rules";
+import { required, email, numeric } from "vee-validate/dist/rules";
 import PopupConfirmSave from "../components/base/BasePopupConfirmSave.vue";
+import Combobox from "../components/base/BaseCombobox.vue";
+import PopupWarning from "../components/base/BasePopupWarning.vue";
 
 // custom rule required code
 extend("requiredCode", {
@@ -348,24 +369,94 @@ extend("checkEmail", {
   message: "Email không đúng định dạng",
 });
 
+extend("requiredDepartment", {
+  ...required,
+  message: "Đơn vị không được để trống",
+});
+
+extend("numericAccount", {
+  ...numeric,
+  message: "Tài khoản ngân hàng chỉ có thể chứa số",
+});
+
 export default {
   name: "EmployeeDetail",
   components: {
     PopupConfirmSave,
+    Combobox,
+    PopupWarning,
   },
   props: ["isOpenModal"],
   data() {
     return {
       // object nhân viên
       employee: {},
+      // object ban đầu
+      employeeOriginalAdd: {},
+      employeeOriginalEdit: {},
       // Id của nhân viên
       employeeId: "",
       // mode cho modal : 0 là add - 1 là edit
       mode: 0,
       newEmployeeCode: "",
+      notifications: [],
+      // trạng thái popup warning
+      isHiddenWarning: true,
+      // lỗi validate
+      textError: "",
     };
   },
   methods: {
+    /**------------------------------------------------------------------------------
+     * Sự kiện click nút X
+     * CreatedBy: LQNHAT(30/08/2021)
+     */
+    closeFormDetail() {
+      console.log("employeeOriginalAdd " + Object.values(this.employeeOriginalAdd));
+      console.log("employeeOriginalEdit " + Object.values(this.employeeOriginalEdit));
+      console.log("employee " + Object.values(this.employee));
+      console.log("gender" + this.employee.GenderName);
+      if ((this.mode == 0)) {
+        if (
+          JSON.stringify(Object.values(this.employeeOriginalAdd)) ===
+          JSON.stringify(Object.values(this.employee))
+        ) {
+          this.$emit("closeForm");
+          this.$refs.form_employee.reset();
+        } else {
+          this.$refs.popupConfirmSave.openPopupConfirmSave();
+        }
+      }
+      else
+      {
+        if (
+          JSON.stringify(Object.values(this.employeeOriginalEdit)) ===
+          JSON.stringify(Object.values(this.employee))
+        ) {
+          this.$emit("closeForm");
+          this.$refs.form_employee.reset();
+        } else {
+          this.$refs.popupConfirmSave.openPopupConfirmSave();
+        }
+      }
+    },
+
+    /**--------------------------------------------------
+     * Bắt sự kiện đóng popup warning
+     * CreatedBy: LQNHAT(30/08/2021)
+     */
+    closeWarning() {
+      this.isHiddenWarning = true;
+    },
+
+    /**---------------------------------------------------
+     * Gán value cho deapartmentId
+     * CreatedBy : LQNHAT(30/08/2021)
+     */
+    getValueDepartment(value) {
+      this.employee.DepartmentId = value;
+    },
+
     /**-------------------------------------------
      * Hàm đóng modal
      * CreatedBy: LQNHAT(28/08/2021)
@@ -379,23 +470,58 @@ export default {
      * Hàm check mode
      * CreateBy : LQNHAT(28/08/2021)
      */
-    show(mode, id, employee) {
+    show(mode, id) {
       this.mode = mode;
       this.employeeId = id;
-      this.employee = employee;
       if (mode == 0) {
         this.employee = {};
         this.autoNewEmployeeCode();
-      }
-      //  else if (mode == 2) {
-      //   this.employee.EmployeeCode = "";
-      //   this.employee.EmployeeId = "";
-      //   this.autoNewEmployeeCode();
-      //   alert(this.employee.EmployeeCode);
-      // } 
-      else {
+      } else {
         this.bindDataToForm();
+        this.getEmployeeForCompare();
       }
+    },
+
+    /**---------------------------------------------------
+     * Hàm nhân bản nhân viên
+     * CreatedBy:LQNHAT(29/08/2021)
+     */
+    cloneToEmployee(employee) {
+      this.employee = employee;
+      // this.employee.EmployeeId = null;
+      this.autoNewEmployeeCode();
+      this.mode = 0;
+      console.log("employeeId" + this.employee.EmployeeId);
+    },
+
+    /**-----------------------------------------------------------
+     * Hiển thị popup warning
+     * CreatedBy: LQNHAT(30/08/2021)
+     */
+    showPopupWarning() {
+      setTimeout(() => {
+        this.notifications = this.$refs.form_employee.errors;
+        if (this.notifications.Code.length > 0) {
+          this.isHiddenWarning = false;
+          this.textError = this.notifications.Code[0];
+        }
+        if (this.notifications.Name.length > 0) {
+          this.isHiddenWarning = false;
+          this.textError = this.notifications.Name[0];
+        }
+        if (this.notifications.Department.length > 0) {
+          this.isHiddenWarning = false;
+          this.textError = this.notifications.Department[0];
+        }
+        if (this.notifications.Email.length > 0) {
+          this.isHiddenWarning = false;
+          this.textError = this.notifications.Email[0];
+        }
+        if (this.notifications.AccountNumber.length > 0) {
+          this.isHiddenWarning = false;
+          this.textError = this.notifications.AccountNumber[0];
+        }
+      }, 100);
     },
 
     /*--------------------------------------------------
@@ -403,8 +529,11 @@ export default {
      * CreatedBy : LQNHAT(28/08/2021)
      */
     saveBtnClick() {
+      this.$refs.popupConfirmSave.closePopupConfirmSave();
       this.$refs.form_employee.validate().then((success) => {
         if (!success) {
+          // validate hiện popup warning
+          this.showPopupWarning();
           return;
         }
         if (this.mode == 0) {
@@ -427,16 +556,17 @@ export default {
      * CreatedBy: LQNHAT(29/08/2021)
      */
     saveAddBtnClick() {
+      this.$refs.popupConfirmSave.closePopupConfirmSave();
       this.$refs.form_employee.validate().then((success) => {
         if (!success) {
+          // validate hiện popup warning
+          this.showPopupWarning();
           return;
         }
         if (this.mode == 0) {
           //add nv
           this.addEmployee();
           this.$refs.form_employee.reset();
-          this.employee = {};
-          this.autoNewEmployeeCode();
           this.mode = 0;
           debugger; // eslint-disable-line
         } else {
@@ -465,12 +595,17 @@ export default {
           this.$toast.success("Thêm mới nhân viên thành công", {
             timeout: 2000,
           });
+          this.autoNewEmployeeCode();
         })
         .catch((errror) => {
           console.log(errror);
         });
     },
 
+    /**------------------------------------------------------------------------
+     * Sửa thông tin nhân viên
+     * CreatedBy: LQNHAT(30/08/2021)
+     */
     editEmployee() {
       var self = this;
       axios
@@ -499,14 +634,14 @@ export default {
       axios
         .get(`https://localhost:44383/api/v1/employees/newEmployeeCode`)
         .then((res) => {
-          let newEmployee = {};
-          newEmployee.EmployeeCode = res.data;
-          self.employee = newEmployee;
-
-          // this.newEmployeeCode = res.data;
-          // self.employee.EmployeeCode = this.newEmployeeCode;
-          // self.$refs.txtEmployeeCode.focus();
-          debugger; // eslint-disable-line
+          // let newEmployee = {};
+          // newEmployee.EmployeeCode = res.data;
+          // self.employee = newEmployee;
+          self.employee.EmployeeCode = res.data;
+          self.employeeOriginalAdd.EmployeeCode = res.data;
+          // self.newEmployeeCode = res.data;
+          // self.employee.EmployeeCode = self.newEmployeeCode;
+          self.$refs.txtEmployeeCode.focus();
         })
         .catch((err) => {
           console.log(err);
@@ -527,7 +662,30 @@ export default {
           // format date về đúng định dạng
           self.employee.DateOfBirth = self.formatDate(res.data.DateOfBirth);
           self.employee.IdentityDate = self.formatDate(res.data.IdentityDate);
-          console.log(res.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+
+    /**---------------------------------------------------
+     * lấy nhân viên theo id để so sánh
+     * CreatedBy: LQNHAT(30/08/2021)
+     */
+    getEmployeeForCompare() {
+      var self = this;
+      // call api
+      axios
+        .get(`https://localhost:44383/api/v1/employees/${self.employeeId}`)
+        .then((res) => {
+          // format date về đúng định dạng
+          self.employeeOriginalEdit = res.data;
+          self.employeeOriginalEdit.DateOfBirth = self.formatDate(
+            res.data.DateOfBirth
+          );
+          self.employeeOriginalEdit.IdentityDate = self.formatDate(
+            res.data.IdentityDate
+          );
         })
         .catch((error) => {
           console.log(error);

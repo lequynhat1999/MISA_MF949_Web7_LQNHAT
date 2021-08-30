@@ -73,20 +73,33 @@
                 </div>
                 <div
                   class="box-option"
-                  :class="{ 'border-box': employee.Option}"
+                  :class="{ 'border-box': employee.Option }"
                 >
-                  <div class="btn-option" @click="isHiddenOption = !isHiddenOption; employee.Option = !employee.Option"></div>
+                  <div
+                    class="btn-option"
+                    @click="
+                      isHiddenOption = !isHiddenOption;
+                      employee.Option = !employee.Option;
+                    "
+                  ></div>
                 </div>
                 <div
-                    class="dropdown-option"
-                    v-if="!isHiddenOption && employee.Option"
-                  >
-                    <div class="option-item" @click="cloneEmployee(employee)">Nhân bản</div>
-                    <div class="option-item" @click="deleteEmployee(employee)">Xóa</div>
-                    <div class="option-item">Ngừng sử dụng</div>
+                  class="dropdown-option"
+                  v-if="!isHiddenOption && employee.Option"
+                  @click="
+                    isHiddenOption = !isHiddenOption;
+                    employee.Option = !employee.Option;
+                  "
+                >
+                  <div class="option-item" @click="cloneEmployee(employee)">
+                    Nhân bản
                   </div>
+                  <div class="option-item" @click="deleteEmployee(employee)">
+                    Xóa
+                  </div>
+                  <div class="option-item">Ngừng sử dụng</div>
+                </div>
               </div>
-              
             </td>
           </tr>
           <tr v-if="employees.length == 0 ? true : false">
@@ -146,7 +159,7 @@ export default {
     EmployeeDetail,
     Dropdown,
     Loading,
-    PopupDelete
+    PopupDelete,
   },
   data() {
     return {
@@ -190,6 +203,7 @@ export default {
     // lấy ra toàn bộ data
     this.getEmployeesByFilter(this.pageIndex, this.pageSize, this.keysearch);
   },
+
   methods: {
     /*-----------------------------------------------------------------
      *Lấy ra danh sách nhân viên theo các tiêu chí và phân trang
@@ -205,7 +219,7 @@ export default {
         )
         .then((res) => {
           self.employees = res.data.Data;
-          self.employees.forEach(employee => {
+          self.employees.forEach((employee) => {
             employee.Option = false;
           });
           self.amountPage = res.data.TotalRecord;
@@ -248,8 +262,7 @@ export default {
      * Hàm bắt sự kiện xóa nhân viên
      * CreatedBy: LQNHAT(29/08/2021)
      */
-    deleteEmployee(employee)
-    {
+    deleteEmployee(employee) {
       this.$refs.popupDelete.openPopupDelete(employee);
     },
 
@@ -257,10 +270,9 @@ export default {
      * Hàm bắt sự kiện nhân bản nhân viên
      * CreatedBy: LQNHAT(29/08/2021)
      */
-    cloneEmployee(employee)
-    {
-      this.employeeId = employee.EmployeeId;
+    cloneEmployee(employee) {
       this.isOpenModal = !this.isOpenModal;
+      this.$refs.modeForm.cloneToEmployee(employee);
     },
 
     /**
@@ -301,8 +313,7 @@ export default {
      * Bắt sự kiện đóng form chi tiết
      * CreatedBy : LQNHAT(28/08/2021)
      */
-    closeForm()
-    {
+    closeForm() {
       this.isOpenModal = true;
     },
 
@@ -349,4 +360,6 @@ export default {
 @import "../css/base/dropdown.css";
 @import "../css/base/popup-confirm-save.css";
 @import "../css/base/popup-delete.css";
+@import "../css/base/combobox.css";
+@import "../css/base/popup-warning.css";
 </style>
