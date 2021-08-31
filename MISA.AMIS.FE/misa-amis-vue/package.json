@@ -14,7 +14,8 @@
     "vee-validate": "^3.4.11",
     "vue": "^2.6.11",
     "vue-axios": "^3.2.5",
-    "vue-toastification": "^1.7.11"
+    "vue-toastification": "^1.7.11",
+    "vue2-datepicker": "^3.10.1"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",

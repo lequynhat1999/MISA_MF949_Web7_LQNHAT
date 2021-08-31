@@ -47,6 +47,7 @@
                       ref="txtEmployeeCode"
                       v-model="employee.EmployeeCode"
                       class="input-modal width-100"
+                      @blur="checkDuplicateEmployeeCode"
                       :class="{
                         'border-red': errors.length > 0 ? true : false,
                       }"
@@ -84,11 +85,14 @@
                   <div class="text-modal">
                     <b>Ngày sinh</b>
                   </div>
-                  <input
-                    type="date"
-                    class="input-modal width-100"
+                  <datepicker
+                    class="width-100"
                     v-model="employee.DateOfBirth"
-                  />
+                    placeholder="DD/MM/YYYY"
+                    :format="'DD/MM/YYYY'"
+                    :value-type="'YYYY-MM-DD'"
+                    :disabled-date="(date) => date >= new Date()"
+                  ></datepicker>
                 </div>
                 <div class="input pdl-16 width-65">
                   <div class="text-modal">
@@ -140,7 +144,7 @@
                     v-slot="{ errors }"
                   >
                     <Combobox
-                      style="border-radius: 4px"
+                      style="border-radius: 4px; height: 33px"
                       class="width-100"
                       :class="{
                         'border-red': errors.length > 0 ? true : false,
@@ -170,11 +174,14 @@
                   <div class="text-modal">
                     <b>Ngày cấp</b>
                   </div>
-                  <input
-                    type="date"
-                    class="input-modal width-100"
-                    v-model="employee.IdentityDate"
-                  />
+                  <datepicker
+                    class="width-100"
+                    v-model="employee.IndentityDate"
+                    placeholder="DD/MM/YYYY"
+                    :format="'DD/MM/YYYY'"
+                    :value-type="'YYYY-MM-DD'"
+                    :disabled-date="(date) => date >= new Date()"
+                  ></datepicker>
                 </div>
               </div>
             </div>
@@ -407,16 +414,46 @@ export default {
     };
   },
   methods: {
+
+    /**
+     * Check trùng mã nhân viên
+     * CreatedBy: LQNHAT(31/08/2021)
+     */
+    checkDuplicateEmployeeCode()
+    {
+      var self = this;
+      // binding data
+      axios
+        .get("https://localhost:44383/api/v1/employees")
+        .then((res) => {
+          self.employees = res.data;
+          self.employees.forEach((item) => {
+            if (
+              self.employee.EmployeeCode == item.EmployeeCode &&
+              self.employee.EmployeeId != item.EmployeeId
+            ) {
+              alert("Trùng mã nhân viên");
+            }
+          });
+        })
+        .catch((res) => {
+          console.log(res);
+        });
+    },
+    
     /**------------------------------------------------------------------------------
      * Sự kiện click nút X
      * CreatedBy: LQNHAT(30/08/2021)
      */
     closeFormDetail() {
-      console.log("employeeOriginalAdd " + Object.values(this.employeeOriginalAdd));
-      console.log("employeeOriginalEdit " + Object.values(this.employeeOriginalEdit));
+      console.log(
+        "employeeOriginalAdd " + Object.values(this.employeeOriginalAdd)
+      );
+      console.log(
+        "employeeOriginalEdit " + Object.values(this.employeeOriginalEdit)
+      );
       console.log("employee " + Object.values(this.employee));
-      console.log("gender" + this.employee.GenderName);
-      if ((this.mode == 0)) {
+      if (this.mode == 0) {
         if (
           JSON.stringify(Object.values(this.employeeOriginalAdd)) ===
           JSON.stringify(Object.values(this.employee))
@@ -426,9 +463,7 @@ export default {
         } else {
           this.$refs.popupConfirmSave.openPopupConfirmSave();
         }
-      }
-      else
-      {
+      } else {
         if (
           JSON.stringify(Object.values(this.employeeOriginalEdit)) ===
           JSON.stringify(Object.values(this.employee))
@@ -453,8 +488,8 @@ export default {
      * Gán value cho deapartmentId
      * CreatedBy : LQNHAT(30/08/2021)
      */
-    getValueDepartment(value) {
-      this.employee.DepartmentId = value;
+     getValueDepartment(value) {
+       this.employee.DepartmentId = value;
     },
 
     /**-------------------------------------------
@@ -475,6 +510,7 @@ export default {
       this.employeeId = id;
       if (mode == 0) {
         this.employee = {};
+        this.employee.Gender = 1;
         this.autoNewEmployeeCode();
       } else {
         this.bindDataToForm();
@@ -491,39 +527,10 @@ export default {
       // this.employee.EmployeeId = null;
       this.autoNewEmployeeCode();
       this.mode = 0;
-      this.employee.EmployeeId = '00000000-0000-0000-0000-000000000000';
-      console.log("employeeId" + this.employee.EmployeeId);
+      this.employee.EmployeeId = "00000000-0000-0000-0000-000000000000";
     },
 
-    /**-----------------------------------------------------------
-     * Hiển thị popup warning
-     * CreatedBy: LQNHAT(30/08/2021)
-     */
-    showPopupWarning() {
-      setTimeout(() => {
-        this.notifications = this.$refs.form_employee.errors;
-        if (this.notifications.Code.length > 0) {
-          this.isHiddenWarning = false;
-          this.textError = this.notifications.Code[0];
-        }
-        if (this.notifications.Name.length > 0) {
-          this.isHiddenWarning = false;
-          this.textError = this.notifications.Name[0];
-        }
-        if (this.notifications.Department.length > 0) {
-          this.isHiddenWarning = false;
-          this.textError = this.notifications.Department[0];
-        }
-        if (this.notifications.Email.length > 0) {
-          this.isHiddenWarning = false;
-          this.textError = this.notifications.Email[0];
-        }
-        if (this.notifications.AccountNumber.length > 0) {
-          this.isHiddenWarning = false;
-          this.textError = this.notifications.AccountNumber[0];
-        }
-      }, 100);
-    },
+    
 
     /*--------------------------------------------------
      * Hàm bắt sự kiện khi click btn Cất
@@ -582,11 +589,40 @@ export default {
       });
     },
 
+    /**-----------------------------------------------------------
+     * Hiển thị popup warning
+     * CreatedBy: LQNHAT(30/08/2021)
+     */
+    showPopupWarning() {
+      this.notifications = this.$refs.form_employee.errors;
+      if (this.notifications.Code.length > 0) {
+        this.isHiddenWarning = false;
+        this.textError = this.notifications.Code[0];
+      }
+      if (this.notifications.Name.length > 0) {
+        this.isHiddenWarning = false;
+        this.textError = this.notifications.Name[0];
+      }
+      if (this.notifications.Department.length > 0) {
+        this.isHiddenWarning = false;
+        this.textError = this.notifications.Department[0];
+      }
+      if (this.notifications.Email.length > 0) {
+        this.isHiddenWarning = false;
+        this.textError = this.notifications.Email[0];
+      }
+      if (this.notifications.AccountNumber.length > 0) {
+        this.isHiddenWarning = false;
+        this.textError = this.notifications.AccountNumber[0];
+      }
+    },
+
     /*------------------------------------------------------------------------
      * Hàm thêm mới nhân viên
      * CreatedBy : LQNHAT(28/08/2021)
      */
     addEmployee() {
+      this.checkDuplicateEmployeeCode();
       var self = this;
       axios
         .post(`https://localhost:44383/api/v1/employees`, self.employee)
@@ -596,8 +632,9 @@ export default {
           this.$toast.success("Thêm mới nhân viên thành công", {
             timeout: 2000,
           });
-          this.employee ={};
+          this.employee = {};
           this.autoNewEmployeeCode();
+          debugger; // eslint-disable-line
         })
         .catch((errror) => {
           console.log(errror);
@@ -609,6 +646,7 @@ export default {
      * CreatedBy: LQNHAT(30/08/2021)
      */
     editEmployee() {
+      this.checkDuplicateEmployeeCode();
       var self = this;
       axios
         .put(
@@ -640,10 +678,9 @@ export default {
           // newEmployee.EmployeeCode = res.data;
           // self.employee = newEmployee;
           self.employee.EmployeeCode = res.data;
+          self.employeeOriginalAdd.Gender = 1;
           self.employeeOriginalAdd.EmployeeCode = res.data;
-          // self.newEmployeeCode = res.data;
-          // self.employee.EmployeeCode = self.newEmployeeCode;
-          self.$refs.txtEmployeeCode.focus();
+          self.$nextTick(() => self.$refs.txtEmployeeCode.focus());
         })
         .catch((err) => {
           console.log(err);

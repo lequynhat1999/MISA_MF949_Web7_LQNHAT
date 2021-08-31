@@ -64,6 +64,7 @@ namespace MISA.AMIS.Api
             app.UseHttpsRedirection();
 
             app.UseRouting();
+            app.UseStaticFiles();
             app.UseCors(x => x
                 .AllowAnyMethod()
                 .AllowAnyHeader()

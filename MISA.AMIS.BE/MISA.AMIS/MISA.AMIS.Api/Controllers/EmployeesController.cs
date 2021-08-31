@@ -110,7 +110,8 @@ namespace MISA.AMIS.Api.Controllers
             {
                 // đường dẫn đến wwwroot
                 string folder = _hostingEnvironment.WebRootPath;
-
+                // file download
+                string urlDownload = string.Format("{0}://{1}/{2}", Request.Scheme, Request.Host, "Danh_sach_nhan_vien.xlsx");
                 // tạo file với đường dẫn wwwroot, tên là danh_sach_nhan_vien
                 var file = new FileInfo(Path.Combine(folder, "Danh_sach_nhan_vien.xlsx"));
                 if (file.Exists)
@@ -122,9 +123,10 @@ namespace MISA.AMIS.Api.Controllers
                 }
 
                 var serviceResult = _employeeService.ExportEmployees(folder);
+                serviceResult.Data = urlDownload;
                 if (serviceResult.MISACode == Core.MISAEnum.EnumServiceResult.Success)
                 {
-                    return StatusCode(200, serviceResult.Message);
+                    return StatusCode(200, serviceResult);
                 }
                 else
                 {

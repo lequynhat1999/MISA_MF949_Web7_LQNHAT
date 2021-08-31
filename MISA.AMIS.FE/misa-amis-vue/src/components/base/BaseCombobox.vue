@@ -1,8 +1,12 @@
 <template>
-  <div class="combobox" @click="toggleCombobox">
+  <div class="combobox">
     <div class="combobox-search flex">
       <input type="text" class="width-100" v-model="keysearch" />
-      <div class="combobox-icon" :class="{ rotate: !isHiddenCombobox }">
+      <div
+        class="combobox-icon"
+        :class="{ rotate: !isHiddenCombobox }"
+        @click="toggleCombobox"
+      >
         <div class="btn-combobox"></div>
       </div>
     </div>
@@ -14,25 +18,15 @@
             <th>Tên đơn vị</th>
           </tr>
         </thead>
-        <tbody v-if="value != null">
+        <tbody>
           <tr
             v-for="(department, index) in departments"
             :key="index"
             @click="selectDepartment(index)"
             :class="{
               'combobox-active':
-                item.DepartmentCode == department.DepartmentCode ? true : false,
+                currentDepartmentId == department.DepartmentId ? true : false,
             }"
-          >
-            <td>{{ department.DepartmentCode }}</td>
-            <td>{{ department.DepartmentName }}</td>
-          </tr>
-        </tbody>
-        <tbody v-else-if="value == null">
-          <tr
-            v-for="(department, index) in options"
-            :key="index"
-            @click="selectDepartment(index)"
           >
             <td>{{ department.DepartmentCode }}</td>
             <td>{{ department.DepartmentName }}</td>
@@ -52,24 +46,32 @@ export default {
     return {
       // trạng thái của combobox
       isHiddenCombobox: true,
-      // data departments
+      // data departments động
       departments: [],
-      // department theo index
-      item: {},
+      // data departments tĩnh
       options: [],
-      keysearch: "",
+      // text input
+      keysearch: null,
+      currentDepartmentId: "",
+      isSearching: true,
     };
   },
   created() {
-    this.getDepartment();
+     this.getDepartment();
+  },
+  mounted() {
+    document.addEventListener("click", this.close);
   },
   watch: {
     keysearch() {
-      this.searchDepartment();
+      console.log(this.departments);
+      console.log(this.options);
+      this.searchByKeysearch();
     },
-    value() {
-      this.setValueDepartment();
-    },
+    value()
+    {
+     this.setValueDepartment();
+    }
   },
   methods: {
     /*----------------------------------------------------
@@ -78,6 +80,7 @@ export default {
      */
     toggleCombobox() {
       this.isHiddenCombobox = !this.isHiddenCombobox;
+      this.getDepartment();
     },
 
     /**-------------------------------------------------------------
@@ -85,63 +88,80 @@ export default {
      * CreatedBy:LQNHAT(30/08/2021)
      */
     getDepartment() {
-      // var self = this;
+      var self = this;
       axios.get(`https://localhost:44383/api/v1/departments`).then((res) => {
-        this.departments = res.data;
-        this.options = res.data;
-        console.log(this.departments);
+        self.departments = res.data;
+        self.options = res.data;
       });
     },
 
-    /**-----------------------------------------------------------
+    /**----------------------------------------------------------------------
      * Select department
-     * CreatedBy: LQNHAT(30/08/2021)
+     * CreatedBy: LQNHAT(31/08/2021)
      */
     selectDepartment(index) {
-      if (index >= 0 && index <= this.departments.length) {
-        this.item = this.departments[index];
-        this.$emit("selectedDepartment", this.item.DepartmentId);
-        this.keysearch = this.item.DepartmentName;
-      }
+      this.currentDepartmentId = this.options[index].DepartmentId;
+      this.keysearch = this.options[index].DepartmentName;
+      this.$emit("selectedDepartment", this.currentDepartmentId);
+      this.isSearching = false;
+      debugger; // eslint-disable-line
     },
 
-    /**-----------------------------------------------------------------
-     * Hàm set value department khi mở form sửa
-     * CreatedBy: LQNHAT(30/08/2021)
+    /**-----------------------------------------------------------------------
+     * Search theo keysearch
+     * CreatedBy: LQNHAT(31/08/2021)
      */
-    setValueDepartment() {
-      let flag = true;
-      this.options.forEach((department, index) => {
-        if (department.DepartmentId == this.value) {
-          this.selectDepartment(index);
-          flag = false;
-        }
-      });
-      if (flag) {
-        this.keysearch = "";
-      }
-    },
-
-    /**---------------------------------------------------------------
-     * Tìm kiếm đơn vị
-     * CreatedBy : LQNHAT(30/08/2021)
-     */
-    searchDepartment() {
-      if (this.keysearch != "") {
+    searchByKeysearch() {
+      if (this.isSearching) {
+        // mở dropdown
         this.isHiddenCombobox = false;
+        this.isRotate = true;
+      } else {
+        // đóng dropdown
+        this.isHiddenCombobox = true;
+        this.isRotate = false;
+      }
+      if (this.keysearch != null && this.keysearch.length > 0) {
         this.departments = [];
-        this.options.forEach((department) => {
+        this.options.forEach((element) => {
           if (
-            department.DepartmentCode.includes(this.keysearch) ||
-            department.DepartmentName.includes(this.keysearch)
+            element.DepartmentName.toLowerCase().includes(
+              this.keysearch.toLowerCase()
+            ) ||
+            element.DepartmentCode.toLowerCase().includes(
+              this.keysearch.toLowerCase()
+            )
           ) {
-            this.departments.push(department);
-            console.log(this.departments);
+            this.departments.push(element);
           }
         });
+        this.isSearching = true;
       } else {
-        this.isHiddenCombobox = false;
+        this.currentDepartmentId = null;
+        this.keysearch = null;
+        this.departments = this.options;
+        this.isSearching = true;
       }
+    },
+
+    /**---------------------------------------------------------
+     * Bind data departmentName lên input
+     * CreatedBy: LQNHAT(31/08/2021)
+     */
+    setValueDepartment() {
+      let flag = false;
+      this.options.forEach((element) => {
+        if (element.DepartmentId == this.value) {
+          this.currentDepartmentId = this.value;
+          this.keysearch = element.DepartmentName;
+          flag = true;
+        }
+      });
+      if (!flag) {
+        this.currentDepartmentId = null;
+        this.keysearch = null;
+      }
+      this.isSearching = false;
     },
 
     /**----------------------------------------------------------------------
@@ -150,13 +170,29 @@ export default {
      */
     close(e) {
       if (!this.$el.contains(e.target)) {
+        if(this.currentDepartmentId != null)
+        {
+          let flag = false;
+          this.options.forEach(element => {
+            if(element.DepartmentId == this.currentDepartmentId)
+            {
+              this.keysearch = element.DepartmentName;
+              flag = true;
+            }
+          });
+          if(!flag)
+          {
+            this.currentDepartmentId = null;
+            this.keysearch = null;
+          }
+        }
+        else
+        {
+          this.keysearch = null;
+        }
         this.isHiddenCombobox = true;
-        this.isRotate = false;
       }
     },
-  },
-  mounted() {
-    document.addEventListener("click", this.close);
   },
 };
 </script>

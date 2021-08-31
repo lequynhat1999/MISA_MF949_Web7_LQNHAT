@@ -1,29 +1,25 @@
 .paging
 {
     display: flex;
-    padding-top: 14px;
-    padding-left: 40px;
+    /* padding-top: 14px; */
+    /* padding-left: 40px; */
     position: relative;
+    height: 46px;
+    line-height: 46px;
+    margin-left: 42px;
+    margin-right: 70px;
+}
+
+.paging-right
+{
+    position: absolute;
+    right: 0;
 }
 
 .page-size
 {
-    position: absolute;
-    right: 265px;
-    bottom: -4px;
-}
-
-.index-page
-{
-    position: absolute;
-    right: 60px;
-    top: 12px;
-}
-
-#select-size 
-{
-    height: 32px;
-    width: 198px;
+    margin-right: 12px;
+    margin-top: 7px;
 }
 
 .index-page
@@ -32,8 +28,39 @@
     margin-right: 30px;
 }
 
-.index-paging
+.pagination
+{
+    display: flex;
+}
+
+.pagination .active
+{
+    border: 1px solid #e0e0e0;
+    font-weight: 900;
+}
+
+.pagination .disabled
+{
+    color:#a6a6a6;
+}
+
+.pagination li 
+{
+    list-style-type: none;
+}
+
+.page-item
 {
     padding-left: 8px;
     padding-right: 8px;
+}
+
+.btn-pre
+{
+    padding-right: 7px;
+}
+
+.btn-next
+{
+    padding-left: 7px;
 }

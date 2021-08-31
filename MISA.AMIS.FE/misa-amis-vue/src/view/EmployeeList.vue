@@ -14,7 +14,7 @@
           <input
             type="text"
             class="input-search"
-            placeholder="Tìm kiếm theo Mã, Tên"
+            placeholder="Tìm kiếm theo Mã, Tên nhân viên"
             v-model="keysearch"
             @input="searchByKeysearch"
           />
@@ -26,15 +26,17 @@
           title="Lấy lại dữ liệu"
           @click="reloadTableAndFilter"
         ></div>
-        <div class="export" title="Xuất ra excel"></div>
+        <div class="export" title="Xuất ra excel" @click="exportEmployee"></div>
       </div>
     </div>
     <div class="table-employee">
       <table border="0" cellspacing="0" width="100%">
         <thead>
-          <th><input type="checkbox" style="width: 16px; height: 18px" /></th>
-          <th>MÃ NHÂN VIÊN</th>
-          <th>TÊN NHÂN VIÊN</th>
+          <th class="column-sticky-left" style="border-right: 0px !important">
+            <input type="checkbox" style="width: 16px; height: 18px" />
+          </th>
+          <th class="column-sticky-left-2">MÃ NHÂN VIÊN</th>
+          <th class="column-sticky-left-3">TÊN NHÂN VIÊN</th>
           <th>GIỚI TÍNH</th>
           <th style="text-align: center">NGÀY SINH</th>
           <th>SỐ CMND</th>
@@ -42,8 +44,10 @@
           <th>TÊN ĐƠN VỊ</th>
           <th>SỐ TÀI KHOẢN</th>
           <th>TÊN NGÂN HÀNG</th>
-          <th>CHI NHÁNH TK NGÂN HÀNG</th>
-          <th style="text-align: center">CHỨC NĂNG</th>
+          <th style="border-right: 0px !important">CHI NHÁNH TK NGÂN HÀNG</th>
+          <th class="column-sticky-right" style="text-align: center">
+            CHỨC NĂNG
+          </th>
         </thead>
         <tbody>
           <tr
@@ -51,11 +55,13 @@
             :key="employee.EmployeeId"
             @dblclick="rowClick(employee.EmployeeId)"
           >
-            <td>
+            <td class="column-sticky-left" style="border-right: 0px !important">
               <input type="checkbox" style="width: 16px; height: 18px" />
             </td>
-            <td>{{ employee.EmployeeCode }}</td>
-            <td :title="employee.FullName">{{ employee.FullName }}</td>
+            <td class="column-sticky-left-2">{{ employee.EmployeeCode }}</td>
+            <td class="column-sticky-left-3" :title="employee.FullName">
+              {{ employee.FullName }}
+            </td>
             <td>{{ employee.GenderName }}</td>
             <td style="text-align: center">
               {{ formatDate(employee.DateOfBirth) }}
@@ -65,8 +71,10 @@
             <td>{{ employee.DepartmentName }}</td>
             <td>{{ employee.AccountNumber }}</td>
             <td>{{ employee.BankName }}</td>
-            <td>{{ employee.BranchName }}</td>
-            <td>
+            <td style="border-right: 0px !important">
+              {{ employee.BranchName }}
+            </td>
+            <td class="column-sticky-right">
               <div class="option-wrapper flex">
                 <div class="btn-edit" @click="rowClick(employee.EmployeeId)">
                   Sửa
@@ -83,22 +91,22 @@
                     "
                   ></div>
                 </div>
-                <div
-                  class="dropdown-option"
-                  v-if="!isHiddenOption && employee.Option"
-                  @click="
-                    isHiddenOption = !isHiddenOption;
-                    employee.Option = !employee.Option;
-                  "
-                >
-                  <div class="option-item" @click="cloneEmployee(employee)">
-                    Nhân bản
-                  </div>
-                  <div class="option-item" @click="deleteEmployee(employee)">
-                    Xóa
-                  </div>
-                  <div class="option-item">Ngừng sử dụng</div>
+              </div>
+              <div
+                class="dropdown-option"
+                v-if="!isHiddenOption && employee.Option"
+                @click="
+                  isHiddenOption = !isHiddenOption;
+                  employee.Option = !employee.Option;
+                "
+              >
+                <div class="option-item" @click="cloneEmployee(employee)">
+                  Nhân bản
                 </div>
+                <div class="option-item" @click="deleteEmployee(employee)">
+                  Xóa
+                </div>
+                <div class="option-item">Ngừng sử dụng</div>
               </div>
             </td>
           </tr>
@@ -114,20 +122,30 @@
       <div class="amount-record">
         Tổng số : <b>{{ amountPage }}</b> bản ghi
       </div>
-      <div class="page-size">
-        <Dropdown
-          :data="dataPage"
-          ref="textDropdownPaging"
-          @get="getValPageSize"
-          @setValueDefaultDropdown="setValueDefaultDropdown"
-        />
-      </div>
-      <div class="index-page">
-        <div class="index-paging btn-pre">Trước</div>
-        <div class="index-paging page-number">1</div>
-        <div class="index-paging page-number">2</div>
-        <div class="index-paging page-number">3</div>
-        <div class="index-paging btn-next">Sau</div>
+      <div class="paging-right flex">
+        <div class="page-size">
+          <Dropdown
+            :data="dataPage"
+            ref="textDropdownPaging"
+            @get="getValPageSize"
+            @setValueDefaultDropdown="setValueDefaultDropdown"
+          />
+        </div>
+        <div class="index-page">
+          <paginate
+            :page-count="numPages"
+            :page-range="3"
+            :margin-pages="1"
+            prev-text="Trước"
+            next-text="Sau"
+            :container-class="'pagination'"
+            :page-class="'page-item'"
+            :prev-link-class="'btn-pre'"
+            :next-link-class="'btn-next'"
+            :click-handler="clickPaging"
+          >
+          </paginate>
+        </div>
       </div>
     </div>
     <EmployeeDetail
@@ -205,6 +223,37 @@ export default {
   },
 
   methods: {
+    /**--------------------------------------------------------------------------
+     * Sự kiện click vào page
+     * CreatedBy: LQNHAT(31/08/2021)
+     */
+    clickPaging(pageNum) {
+      this.pageIndex = pageNum;
+      this.getEmployeesByFilter(this.pageIndex, this.pageSize, this.keysearch);
+    },
+
+    /**------------------------------------------------------------------------
+     * Xuất khẩu nhân viên
+     * CreatedBy:LQNHAT(31/08/2021)
+     */
+    exportEmployee() {
+      var self = this;
+      self.isLoading = true;
+      axios
+        .get(`https://localhost:44383/api/v1/employees/export`)
+        .then((res) => {
+          console.log(res.data);
+          // download file excel về máy
+          window.location = res.data.Data;
+          self.$toast.success("Xuất khẩu nhân viên thành công", {
+            timeout: 2000,
+          });
+          self.isLoading = false;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
     /*-----------------------------------------------------------------
      *Lấy ra danh sách nhân viên theo các tiêu chí và phân trang
      *CreateBy: LQNhat(14/08/2021)

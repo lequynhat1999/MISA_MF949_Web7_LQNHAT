@@ -71,6 +71,9 @@
 .option-wrapper
 {
   position: relative;
+  z-index: 1;
+  align-items: center;
+  justify-content: center;
 }
 
 .btn-edit,
@@ -106,8 +109,8 @@
 
 .dropdown-option {
   position: absolute;
-  z-index: 999;
-  top: 10px;
+  z-index: 10;
+  top: 0px;
   right:60px;
   width: 104px;
   height: 84px;
@@ -130,3 +133,63 @@
   color: #2ca01c;
 }
 
+
+ /* .option-wrapper
+ {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+ }
+
+ .btn-edit
+ {
+  color: #058bd4;
+ }
+
+ .box-option
+ {
+  width: 28px;
+  height: 18px;
+  position: relative;
+  border: 1px solid transparent;
+  margin-left: 10px;
+ }
+
+ .border-box
+{
+  border: 1px solid #0075c0;
+}
+
+.btn-option
+{
+  height: 16px;
+  width: 16px;
+  cursor: pointer;
+  display: block;
+  margin: 0 auto;
+  background: url("../../assets/img/Sprites.64af8f61.svg") no-repeat -896px -359px;
+}
+
+.dropdown-option
+{
+  background: #fff;
+  width: 100%;
+  position: absolute;
+  top: 24px;
+  left: -80px;
+  z-index: 999;
+  width: 130px;
+  border: 1px solid #c8c8c8;
+}
+
+.option-item
+{
+  display: block;
+  height: 32px;
+  line-height: 32px;
+  color: #000;
+  padding: 0 12px;
+  text-align: left;
+} */

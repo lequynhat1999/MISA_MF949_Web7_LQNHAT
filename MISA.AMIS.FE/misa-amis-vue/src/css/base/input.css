@@ -4,6 +4,7 @@
   border-radius: 4px;
   border: 1px solid #babec5;
   height: 36px;
+  width: 242px;
 }
 
 .input-search::placeholder {
@@ -91,4 +92,41 @@ input[type='radio']:checked:after {
 .border-red
 {
   border: 1px solid red  !important;
+}
+
+.mx-input {
+  width: 143px !important;
+  height: 32px !important;
+  border: 1px solid #bbbbbb !important;
+  padding: 0px !important;
+  padding-left: 12px !important;
+  color: #000 !important;
+  position: relative;
+}
+
+.mx-input:focus {
+  border-color: #2ca01c !important;
+}
+
+.mx-input::placeholder
+{
+  font-size: 11px !important;
+  font-style: italic;
+}
+
+.mx-icon-calendar,
+.mx-icon-clear {
+
+  padding-right: 2px;
+}
+
+.mx-input-wrapper
+{
+  width: 143px;
+}
+
+.mx-table-date td, .mx-table-date th
+{
+  text-align: center !important;
+
 }

@@ -7,6 +7,9 @@ import * as rules from 'vee-validate/dist/rules';
 import { messages } from 'vee-validate/dist/locale/vi.json';
 import Toast from "vue-toastification";
 import "vue-toastification/dist/index.css";
+import DatePicker from 'vue2-datepicker';
+import 'vue2-datepicker/index.css';
+import Paginate from 'vuejs-paginate'
 
 const options = {
   // You can set your default options here
@@ -25,8 +28,9 @@ Object.keys(rules).forEach(rule => {
 // Register it globally
 Vue.component('ValidationProvider', ValidationProvider);
 Vue.component('ValidationObserver', ValidationObserver);
+Vue.component('paginate', Paginate)
 Vue.config.productionTip = false
-
+Vue.component('datepicker', DatePicker)
 Vue.use(VueAxios, axios)
 new Vue({
   render: h => h(App),
