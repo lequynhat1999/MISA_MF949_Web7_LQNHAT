@@ -19,6 +19,7 @@ namespace MISA.AMIS.Api.Controllers
         IEmployeeService _employeeService;
         IEmployeeRepository _employeeRepository;
         private readonly IHostingEnvironment _hostingEnvironment;
+        private const string _excelName = "Danh_sach_nhan_vien.xlsx";
         #endregion
 
         #region Constructor
@@ -111,15 +112,15 @@ namespace MISA.AMIS.Api.Controllers
                 // đường dẫn đến wwwroot
                 string folder = _hostingEnvironment.WebRootPath;
                 // file download
-                string urlDownload = string.Format("{0}://{1}/{2}", Request.Scheme, Request.Host, "Danh_sach_nhan_vien.xlsx");
+                string urlDownload = string.Format("{0}://{1}/{2}", Request.Scheme, Request.Host, _excelName);
                 // tạo file với đường dẫn wwwroot, tên là danh_sach_nhan_vien
-                var file = new FileInfo(Path.Combine(folder, "Danh_sach_nhan_vien.xlsx"));
+                var file = new FileInfo(Path.Combine(folder, _excelName));
                 if (file.Exists)
                 {
                     // xóa file cũ nếu đã tồn tại
                     file.Delete();
                     // khởi tạo ra file mới tên là danh_sach_nhan_vien
-                    file = new FileInfo(Path.Combine(folder, "Danh_sach_nhan_vien.xlsx"));
+                    file = new FileInfo(Path.Combine(folder, _excelName));
                 }
 
                 var serviceResult = _employeeService.ExportEmployees(folder);

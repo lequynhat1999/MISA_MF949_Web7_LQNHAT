@@ -92,8 +92,7 @@ namespace MISA.AMIS.Core.Services
                         workSheet.Cells[row, 2].Value = employee.EmployeeCode;
                         workSheet.Cells[row, 3].Value = employee.FullName;
                         workSheet.Cells[row, 4].Value = employee.GenderName;
-                        //workSheet.Cells[row, 5].Value = employee.DateOfBirth == null ? "" : DateTime.Now.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture);
-                        workSheet.Cells[row, 5].Value = employee.DateOfBirth;
+                        workSheet.Cells[row, 5].Value = Convert.ToDateTime(employee.DateOfBirth).ToString("dd/MM/yyyy");
                         workSheet.Cells[row, 6].Value = employee.PositionName;
                         workSheet.Cells[row, 7].Value = employee.DepartmentName;
                         workSheet.Cells[row, 8].Value = employee.AccountNumber;

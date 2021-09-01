@@ -376,11 +376,13 @@ extend("checkEmail", {
   message: "Email không đúng định dạng",
 });
 
+// custom rule check required department
 extend("requiredDepartment", {
   ...required,
   message: "Đơn vị không được để trống",
 });
 
+// custom rule format account number
 extend("numericAccount", {
   ...numeric,
   message: "Tài khoản ngân hàng chỉ có thể chứa số",
@@ -701,30 +703,8 @@ export default {
           // format date về đúng định dạng
           self.employee.DateOfBirth = self.formatDate(res.data.DateOfBirth);
           self.employee.IdentityDate = self.formatDate(res.data.IdentityDate);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
-
-    /**---------------------------------------------------
-     * lấy nhân viên theo id để so sánh
-     * CreatedBy: LQNHAT(30/08/2021)
-     */
-    getEmployeeForCompare() {
-      var self = this;
-      // call api
-      axios
-        .get(`https://localhost:44383/api/v1/employees/${self.employeeId}`)
-        .then((res) => {
-          // format date về đúng định dạng
-          self.employeeOriginalEdit = res.data;
-          self.employeeOriginalEdit.DateOfBirth = self.formatDate(
-            res.data.DateOfBirth
-          );
-          self.employeeOriginalEdit.IdentityDate = self.formatDate(
-            res.data.IdentityDate
-          );
+          // assign employee cho employeeOriginalEdit
+          Object.assign(this.employeeOriginalEdit,this.employee);
         })
         .catch((error) => {
           console.log(error);

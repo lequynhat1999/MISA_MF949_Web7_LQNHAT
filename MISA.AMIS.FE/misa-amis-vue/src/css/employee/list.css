@@ -8,19 +8,27 @@
 .btn-add-employee {
   position: absolute;
   right: 38px;
-  top: 28px;
+  top: 23px;
+}
+
+.box-toolbar
+{
+  background-color: #e6e6e6;
 }
 
 .toolbar {
   position: relative;
   display: flex;
-  height: 56px;
+  height: 76px;
+  margin-left: 20px;
+  background-color: white;
+  margin-right: 20px;
 }
 
 .toolbar-right {
   display: flex;
   position: absolute;
-  right: 50px;
+  right: 30px;
   top: 20px;
 }
 

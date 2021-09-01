@@ -8,7 +8,7 @@
         <div class="title-popup flex">
           <div class="img-confirm-delete"></div>
           <div class="text-confirm-save">
-            Bạn có thực sự muốn xóa nhân viên {{ employee.EmployeeCode }} không?
+            Bạn có thực sự muốn xóa nhân viên có mã nhân viên {{ employee.EmployeeCode }} không?
           </div>
         </div>
         <div class="btn-popup-save flex">

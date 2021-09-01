@@ -5,14 +5,14 @@
       <div class="amis-icon"></div>
     </div>
     <div class="menu-content">
-      <div class="nav-item" title="Tổng quan">
-        <div class="nav-item-icon nav-item-overview"></div>
+      <router-link to="/overview" class="nav-item" title="Tổng quan" exact-active-class="icon-active;menu-active">
+        <div class="nav-item-icon nav-item-overview" exact-active-class="icon-active"></div>
         <div class="nav-item-text">Tổng quan</div>
-      </div>
-      <div class="nav-item" title="Tiền mặt">
-        <div class="nav-item-icon nav-item-money"></div>
-        <div class="nav-item-text">Tiền mặt</div>
-      </div>
+      </router-link>
+      <router-link to="/employee" class="nav-item" title="Nhân viên" active-class="menu-active">
+        <div class="nav-item-icon nav-item-money" active-class="icon-active"></div>
+        <div class="nav-item-text">Nhân viên</div>
+      </router-link>
       <div class="nav-item" title="Tiền gửi">
         <div class="nav-item-icon nav-item-deposits"></div>
         <div class="nav-item-text">Tiền gửi</div>
@@ -72,9 +72,24 @@
 <script>
 export default {
   name: "TheMenu",
+  data() {
+    return {
+      // active item
+      isActive: true,
+    };
+  },
+  methods: {
+    /**------------------------------------------------------
+     * active item menu
+     * CreatedBy: LQNHAT(01/09/2021)
+     */
+    selectItemMenu() {
+      this.isActive = !this.isActive;
+    },
+  },
 };
 </script>
 
 <style>
-@import '../../css/page/menu.css';
+@import "../../css/page/menu.css";
 </style>

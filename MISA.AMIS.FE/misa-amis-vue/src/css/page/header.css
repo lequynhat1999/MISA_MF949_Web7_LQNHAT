@@ -66,8 +66,8 @@
   .bell-header
   {
     background: url("../../assets/img/Sprites.64af8f61.svg") no-repeat -789px -30px;
-    width: 20px;
-    height: 20px;
+    width: 24px;
+    height: 24px;
     margin-top: 15px;
-    margin-right: 24px;
+    margin-right: 16px;
   }

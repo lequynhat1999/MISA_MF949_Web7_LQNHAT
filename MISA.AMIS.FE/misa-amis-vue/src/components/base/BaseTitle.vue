@@ -10,12 +10,5 @@ export default {
 </script>
 
 <style>
-.text-employee
-{
-    font-size: 24px;
-    font-weight: 700;
-    color: #111;
-    margin-top: 26px;
-    margin-left: 21px;
-}
+
 </style>

@@ -10,7 +10,7 @@ import "vue-toastification/dist/index.css";
 import DatePicker from 'vue2-datepicker';
 import 'vue2-datepicker/index.css';
 import Paginate from 'vuejs-paginate'
-
+import router from './router';
 const options = {
   // You can set your default options here
   position: 'bottom-right'
@@ -33,5 +33,6 @@ Vue.config.productionTip = false
 Vue.component('datepicker', DatePicker)
 Vue.use(VueAxios, axios)
 new Vue({
+  router,
   render: h => h(App),
 }).$mount('#app')

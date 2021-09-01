@@ -8,143 +8,167 @@
         </button>
       </div>
     </div>
-    <div class="toolbar">
-      <div class="toolbar-right">
-        <div class="box-search">
-          <input
-            type="text"
-            class="input-search"
-            placeholder="Tìm kiếm theo Mã, Tên nhân viên"
-            v-model="keysearch"
-            @input="searchByKeysearch"
-          />
-          <div class="icon-search"></div>
-        </div>
+    <div class="box-toolbar">
+      <div class="toolbar">
+        <div class="toolbar-right">
+          <div class="box-search">
+            <input
+              type="text"
+              class="input-search"
+              placeholder="Tìm kiếm theo Mã, Tên nhân viên"
+              v-model="keysearch"
+              @input="searchByKeysearch"
+            />
+            <div class="icon-search"></div>
+          </div>
 
-        <div
-          class="reload"
-          title="Lấy lại dữ liệu"
-          @click="reloadTableAndFilter"
-        ></div>
-        <div class="export" title="Xuất ra excel" @click="exportEmployee"></div>
+          <div
+            class="reload"
+            title="Lấy lại dữ liệu"
+            @click="reloadTableAndFilter"
+          ></div>
+          <div
+            class="export"
+            title="Xuất ra excel"
+            @click="exportEmployee"
+          ></div>
+        </div>
       </div>
     </div>
-    <div class="table-employee">
-      <table border="0" cellspacing="0" width="100%">
-        <thead>
-          <th class="column-sticky-left" style="border-right: 0px !important">
-            <input type="checkbox" style="width: 16px; height: 18px" />
-          </th>
-          <th class="column-sticky-left-2">MÃ NHÂN VIÊN</th>
-          <th class="column-sticky-left-3">TÊN NHÂN VIÊN</th>
-          <th>GIỚI TÍNH</th>
-          <th style="text-align: center">NGÀY SINH</th>
-          <th>SỐ CMND</th>
-          <th>CHỨC DANH</th>
-          <th>TÊN ĐƠN VỊ</th>
-          <th>SỐ TÀI KHOẢN</th>
-          <th>TÊN NGÂN HÀNG</th>
-          <th style="border-right: 0px !important">CHI NHÁNH TK NGÂN HÀNG</th>
-          <th class="column-sticky-right" style="text-align: center">
-            CHỨC NĂNG
-          </th>
-        </thead>
-        <tbody>
-          <tr
-            v-for="employee in employees"
-            :key="employee.EmployeeId"
-            @dblclick="rowClick(employee.EmployeeId)"
-          >
-            <td class="column-sticky-left" style="border-right: 0px !important">
-              <input type="checkbox" style="width: 16px; height: 18px" />
-            </td>
-            <td class="column-sticky-left-2">{{ employee.EmployeeCode }}</td>
-            <td class="column-sticky-left-3" :title="employee.FullName">
-              {{ employee.FullName }}
-            </td>
-            <td>{{ employee.GenderName }}</td>
-            <td style="text-align: center">
-              {{ formatDate(employee.DateOfBirth) }}
-            </td>
-            <td>{{ employee.IdentityNumber }}</td>
-            <td>{{ employee.PositionName }}</td>
-            <td>{{ employee.DepartmentName }}</td>
-            <td>{{ employee.AccountNumber }}</td>
-            <td>{{ employee.BankName }}</td>
-            <td style="border-right: 0px !important">
-              {{ employee.BranchName }}
-            </td>
-            <td class="column-sticky-right">
-              <div class="option-wrapper flex">
-                <div class="btn-edit" @click="rowClick(employee.EmployeeId)">
-                  Sửa
-                </div>
-                <div
-                  class="box-option"
-                  :class="{ 'border-box': employee.Option }"
+    <div class="box-table">
+      <div class="box-table-employee">
+        <div class="table-employee">
+          <table border="0" cellspacing="0" width="100%">
+            <thead>
+              <th
+                class="column-sticky-left border-none"
+              >
+                <input type="checkbox" style="width: 16px; height: 18px" />
+              </th>
+              <th class="column-sticky-left-2">MÃ NHÂN VIÊN</th>
+              <th class="column-sticky-left-3">TÊN NHÂN VIÊN</th>
+              <th>GIỚI TÍNH</th>
+              <th style="text-align: center">NGÀY SINH</th>
+              <th>SỐ CMND</th>
+              <th>CHỨC DANH</th>
+              <th>TÊN ĐƠN VỊ</th>
+              <th>SỐ TÀI KHOẢN</th>
+              <th>TÊN NGÂN HÀNG</th>
+              <th class="border-none">
+                CHI NHÁNH TK NGÂN HÀNG
+              </th>
+              <th class="column-sticky-right" style="text-align: center">
+                CHỨC NĂNG
+              </th>
+            </thead>
+            <tbody>
+              <tr
+                v-for="employee in employees"
+                :key="employee.EmployeeId"
+                @dblclick="rowClick(employee.EmployeeId)"
+              >
+                <td
+                  class="column-sticky-left border-none"
                 >
+                  <input type="checkbox" class="size-checkbox"/>
+                </td>
+                <td class="column-sticky-left-2">
+                  {{ employee.EmployeeCode }}
+                </td>
+                <td class="column-sticky-left-3" :title="employee.FullName">
+                  {{ employee.FullName }}
+                </td>
+                <td>{{ employee.GenderName }}</td>
+                <td style="text-align: center">
+                  {{ formatDate(employee.DateOfBirth) }}
+                </td>
+                <td>{{ employee.IdentityNumber }}</td>
+                <td>{{ employee.PositionName }}</td>
+                <td>{{ employee.DepartmentName }}</td>
+                <td>{{ employee.AccountNumber }}</td>
+                <td>{{ employee.BankName }}</td>
+                <td class="border-none">
+                  {{ employee.BranchName }}
+                </td>
+                <td class="column-sticky-right">
+                  <div class="option-wrapper flex">
+                    <div
+                      class="btn-edit"
+                      @click="rowClick(employee.EmployeeId)"
+                    >
+                      Sửa
+                    </div>
+                    <div
+                      class="box-option"
+                      :class="{ 'border-box': employee.Option }"
+                    >
+                      <div
+                        class="btn-option"
+                        @click="
+                          isHiddenOption = !isHiddenOption;
+                          employee.Option = !employee.Option;
+                        "
+                      ></div>
+                    </div>
+                  </div>
                   <div
-                    class="btn-option"
+                    class="dropdown-option"
+                    v-if="!isHiddenOption && employee.Option"
                     @click="
                       isHiddenOption = !isHiddenOption;
                       employee.Option = !employee.Option;
                     "
-                  ></div>
-                </div>
-              </div>
-              <div
-                class="dropdown-option"
-                v-if="!isHiddenOption && employee.Option"
-                @click="
-                  isHiddenOption = !isHiddenOption;
-                  employee.Option = !employee.Option;
-                "
-              >
-                <div class="option-item" @click="cloneEmployee(employee)">
-                  Nhân bản
-                </div>
-                <div class="option-item" @click="deleteEmployee(employee)">
-                  Xóa
-                </div>
-                <div class="option-item">Ngừng sử dụng</div>
-              </div>
-            </td>
-          </tr>
-          <tr v-if="employees.length == 0 ? true : false">
-            <td colspan="12" style="text-align: center">
-              Không có dữ liệu để hiển thị
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <div class="paging">
-      <div class="amount-record">
-        Tổng số : <b>{{ amountPage }}</b> bản ghi
-      </div>
-      <div class="paging-right flex">
-        <div class="page-size">
-          <Dropdown
-            :data="dataPage"
-            ref="textDropdownPaging"
-            @get="getValPageSize"
-            @setValueDefaultDropdown="setValueDefaultDropdown"
-          />
+                  >
+                    <div class="option-item" @click="cloneEmployee(employee)">
+                      Nhân bản
+                    </div>
+                    <div class="option-item" @click="deleteEmployee(employee)">
+                      Xóa
+                    </div>
+                    <div class="option-item">Ngừng sử dụng</div>
+                  </div>
+                </td>
+              </tr>
+              <tr v-if="employees.length == 0 ? true : false">
+                <td colspan="12" style="text-align: center">
+                  Không có dữ liệu để hiển thị
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-        <div class="index-page">
-          <paginate
-            :page-count="numPages"
-            :page-range="3"
-            :margin-pages="1"
-            prev-text="Trước"
-            next-text="Sau"
-            :container-class="'pagination'"
-            :page-class="'page-item'"
-            :prev-link-class="'btn-pre'"
-            :next-link-class="'btn-next'"
-            :click-handler="clickPaging"
-          >
-          </paginate>
+      </div>
+    </div>
+    <div class="box-paging">
+      <div class="paging">
+        <div class="amount-record">
+          Tổng số : <b>{{ amountPage }}</b> bản ghi
+        </div>
+        <div class="paging-right flex">
+          <div class="page-size">
+            <Dropdown
+              :data="dataPage"
+              ref="textDropdownPaging"
+              @get="getValPageSize"
+              @setValueDefaultDropdown="setValueDefaultDropdown"
+            />
+          </div>
+          <div class="index-page">
+            <paginate
+              :page-count="numPages"
+              :page-range="3"
+              :margin-pages="1"
+              prev-text="Trước"
+              next-text="Sau"
+              :container-class="'pagination'"
+              :page-class="'page-item'"
+              :prev-link-class="'btn-pre'"
+              :next-link-class="'btn-next'"
+              :click-handler="clickPaging"
+              ref="pagination"
+            >
+            </paginate>
+          </div>
         </div>
       </div>
     </div>
@@ -286,8 +310,8 @@ export default {
      */
     reloadTableAndFilter() {
       var self = this;
-      self.pageIndex = 1;
-      self.$refs.textDropdownPaging.setTextDefault();
+      // self.pageIndex = 1;
+      // self.$refs.textDropdownPaging.setTextDefault();
       self.isLoading = true;
       axios
         .get(
@@ -299,6 +323,7 @@ export default {
           self.employees = res.data.Data;
           self.amountPage = res.data.TotalRecord;
           self.numPages = res.data.TotalPage;
+          self.$refs.pagination.selectFirstPage();
           self.keysearch = "";
           self.isLoading = false;
         })
@@ -411,4 +436,6 @@ export default {
 @import "../css/base/popup-delete.css";
 @import "../css/base/combobox.css";
 @import "../css/base/popup-warning.css";
+@import "../css/page/content.css";
+@import "../css/base/title.css";
 </style>

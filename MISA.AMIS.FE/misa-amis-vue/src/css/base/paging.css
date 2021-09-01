@@ -1,36 +1,49 @@
 .paging
 {
     display: flex;
-    /* padding-top: 14px; */
-    /* padding-left: 40px; */
+    align-items: center;
     position: relative;
     height: 46px;
-    line-height: 46px;
-    margin-left: 42px;
-    margin-right: 70px;
+    margin-left: 20px;
+    margin-right: 20px;
+    background-color: white;
+}
+
+.box-paging
+{
+    background-color: #e6e6e6;
+}
+
+.amount-record
+{
+    margin-left: 23px;
+    margin-top: 3px;
 }
 
 .paging-right
 {
     position: absolute;
-    right: 0;
+    right: 50px;
 }
 
 .page-size
 {
     margin-right: 12px;
-    margin-top: 7px;
+    margin-top: 3px;
 }
 
 .index-page
 {
     display: flex;
     margin-right: 30px;
+    margin-top: 3px;
 }
 
 .pagination
 {
     display: flex;
+    align-items: center;
+    height: 32px;
 }
 
 .pagination .active
@@ -51,8 +64,7 @@
 
 .page-item
 {
-    padding-left: 8px;
-    padding-right: 8px;
+    padding: 0 10px;
 }
 
 .btn-pre

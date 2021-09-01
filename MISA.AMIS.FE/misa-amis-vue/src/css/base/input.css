@@ -3,8 +3,9 @@
   outline: none;
   border-radius: 4px;
   border: 1px solid #babec5;
-  height: 36px;
+  height: 32px;
   width: 242px;
+  margin-top: 4px;
 }
 
 .input-search::placeholder {
@@ -20,7 +21,7 @@
     height: 22px;
     position: absolute;
     right:3px;
-    top: 9px;
+    top: 12px;
 }
 
 .input-search:focus
