@@ -3,7 +3,13 @@
     <div class="title-content">
       <BaseTitle :title="title" />
       <div class="btn-add-employee">
-        <button class="m-btn" @click="openModal">
+        <button
+          class="m-btn"
+          @click="openModal"
+          title="Thêm mới nhân viên (Ctrl + Shift + A)"
+          v-shortkey="['ctrl', 'shift', 'a']"
+          @shortkey="openModal"
+        >
           <div class="text-add">Thêm mới nhân viên</div>
         </button>
       </div>
@@ -40,9 +46,7 @@
         <div class="table-employee">
           <table border="0" cellspacing="0" width="100%">
             <thead>
-              <th
-                class="column-sticky-left border-none"
-              >
+              <th class="column-sticky-left border-none">
                 <input type="checkbox" style="width: 16px; height: 18px" />
               </th>
               <th class="column-sticky-left-2">MÃ NHÂN VIÊN</th>
@@ -54,23 +58,19 @@
               <th>TÊN ĐƠN VỊ</th>
               <th>SỐ TÀI KHOẢN</th>
               <th>TÊN NGÂN HÀNG</th>
-              <th class="border-none">
-                CHI NHÁNH TK NGÂN HÀNG
-              </th>
+              <th class="border-none">CHI NHÁNH TK NGÂN HÀNG</th>
               <th class="column-sticky-right" style="text-align: center">
                 CHỨC NĂNG
               </th>
             </thead>
-            <tbody>
+            <tbody ref="refTbody">
               <tr
-                v-for="employee in employees"
-                :key="employee.EmployeeId"
-                @dblclick="rowClick(employee.EmployeeId)"
+                v-for="(employee, index) in employees"
+                :key="index"
+                @dblclick="rowClick(index)"
               >
-                <td
-                  class="column-sticky-left border-none"
-                >
-                  <input type="checkbox" class="size-checkbox"/>
+                <td class="column-sticky-left border-none">
+                  <input type="checkbox" class="size-checkbox" />
                 </td>
                 <td class="column-sticky-left-2">
                   {{ employee.EmployeeCode }}
@@ -92,40 +92,22 @@
                 </td>
                 <td class="column-sticky-right">
                   <div class="option-wrapper flex">
-                    <div
-                      class="btn-edit"
-                      @click="rowClick(employee.EmployeeId)"
-                    >
-                      Sửa
-                    </div>
+                    <div class="btn-edit" @click="rowClick(index)">Sửa</div>
                     <div
                       class="box-option"
-                      :class="{ 'border-box': employee.Option }"
+                      :class="{
+                        'border-box':
+                          selectedRow == index && contextMenu.isShow == true
+                            ? true
+                            : false,
+                      }"
                     >
                       <div
                         class="btn-option"
-                        @click="
-                          isHiddenOption = !isHiddenOption;
-                          employee.Option = !employee.Option;
-                        "
+                        @click.stop="openContextMenu($event, index)"
+                        ref="btnOption"
                       ></div>
                     </div>
-                  </div>
-                  <div
-                    class="dropdown-option"
-                    v-if="!isHiddenOption && employee.Option"
-                    @click="
-                      isHiddenOption = !isHiddenOption;
-                      employee.Option = !employee.Option;
-                    "
-                  >
-                    <div class="option-item" @click="cloneEmployee(employee)">
-                      Nhân bản
-                    </div>
-                    <div class="option-item" @click="deleteEmployee(employee)">
-                      Xóa
-                    </div>
-                    <div class="option-item">Ngừng sử dụng</div>
                   </div>
                 </td>
               </tr>
@@ -136,6 +118,16 @@
               </tr>
             </tbody>
           </table>
+          <div
+            class="dropdown-option"
+            :style="{ top: contextMenu.positionY, left: contextMenu.positionX }"
+            v-if="contextMenu.isShow"
+            ref="contextMenu"
+          >
+            <div class="option-item" @click="cloneEmployee">Nhân bản</div>
+            <div class="option-item" @click="deleteEmployee">Xóa</div>
+            <div class="option-item-disabled">Ngừng sử dụng</div>
+          </div>
         </div>
       </div>
     </div>
@@ -239,14 +231,78 @@ export default {
       isHiddenOption: true,
       // loading
       isLoading: false,
+      // trạng thái của contextMenu
+      contextMenu: {
+        isShow: false,
+        positionX: "0px",
+        positionY: "0px",
+      },
+      // row được chọn
+      selectedRow: -1,
     };
   },
   created() {
     // lấy ra toàn bộ data
     this.getEmployeesByFilter(this.pageIndex, this.pageSize, this.keysearch);
+    document.addEventListener("click", this.clickOutSide);
   },
 
   methods: {
+    /**----------------------------------------------------------------------------
+     * Mở context menu
+     * CreatedBy: LQNHAT(01/09/2021)
+     */
+    openContextMenu(event, index) {
+      let target = event.currentTarget;
+      if (index == this.pageSize - 1) {
+        this.contextMenu = {
+          isShow: true,
+          positionX: target.getBoundingClientRect().x - 83 + "px",
+          positionY: target.getBoundingClientRect().y - 90 + "px",
+        };
+      } else {
+        this.contextMenu = {
+          isShow: true,
+          positionX: target.getBoundingClientRect().x - 83 + "px",
+          positionY: target.getBoundingClientRect().y + 20 + "px",
+        };
+      }
+
+      this.selectedRow = index;
+    },
+
+    /**--------------------------------------------------------------------------
+     * Đóng context menu
+     * CreatedBy: LQNHAT(01/09/2021)
+     */
+    closeContextMenu() {
+      this.contextMenu = {
+        isShow: false,
+        positionX: 0 + "px",
+        positionY: 0 + "px",
+      };
+    },
+
+    /**----------------------------------------------------------------------------------
+     * Click ra ngoài thì đóng context menu
+     * CreatedBy: LQNHAT(01/09/2021)
+     */
+    clickOutSide(e) {
+      let el = this.$refs.contextMenu;
+      let icon = this.$refs.btnOption;
+      let target = e.target;
+      this.selectedRow = -1;
+      if (el) {
+        if (
+          icon.every((icon) => icon !== target) &&
+          el !== target &&
+          !el.contains(target)
+        ) {
+          this.contextMenu.isShow = false;
+        }
+      }
+    },
+
     /**--------------------------------------------------------------------------
      * Sự kiện click vào page
      * CreatedBy: LQNHAT(31/08/2021)
@@ -336,17 +392,21 @@ export default {
      * Hàm bắt sự kiện xóa nhân viên
      * CreatedBy: LQNHAT(29/08/2021)
      */
-    deleteEmployee(employee) {
+    deleteEmployee() {
+      let employee = this.employees[this.selectedRow];
       this.$refs.popupDelete.openPopupDelete(employee);
+      this.closeContextMenu();
     },
 
     /**-----------------------------------------------------------------
      * Hàm bắt sự kiện nhân bản nhân viên
      * CreatedBy: LQNHAT(29/08/2021)
      */
-    cloneEmployee(employee) {
+    cloneEmployee() {
+      let employee = this.employees[this.selectedRow];
       this.isOpenModal = !this.isOpenModal;
       this.$refs.modeForm.cloneToEmployee(employee);
+      this.closeContextMenu();
     },
 
     /**
@@ -395,10 +455,11 @@ export default {
      * Bắt sự kiện dbclik hoặc khi ấn vào nút sửa
      * CreatedBy: LQNHAT(28/08/2021)
      */
-    rowClick(employeeId) {
+    rowClick(index) {
+      this.employeeId = this.employees[index].EmployeeId;
       this.isOpenModal = !this.isOpenModal;
       this.modeFormDetail = 1;
-      this.$refs.modeForm.show(this.modeFormDetail, employeeId);
+      this.$refs.modeForm.show(this.modeFormDetail, this.employeeId);
     },
 
     /**--------------------------------------------------

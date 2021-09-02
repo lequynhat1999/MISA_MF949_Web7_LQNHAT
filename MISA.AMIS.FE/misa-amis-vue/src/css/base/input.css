@@ -131,3 +131,13 @@ input[type='radio']:checked:after {
   text-align: center !important;
 
 }
+
+.border-red
+{
+  border-color: 1px solid red;
+}
+
+.bg-red
+{
+  border-color: 1px solid red;
+}

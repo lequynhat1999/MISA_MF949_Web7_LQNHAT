@@ -13,8 +13,8 @@ const router = new VueRouter({
     mode: 'history',
     base: process.env.BASE_URL,
     routes,
-    linkActiveClass: "menu-active", // active class for non-exact links.
-    linkExactActiveClass: "menu-active" // active class for *exact* links.
+    linkActiveClass: "menu-active", 
+    linkExactActiveClass: "menu-active" 
 })
 
 export default router

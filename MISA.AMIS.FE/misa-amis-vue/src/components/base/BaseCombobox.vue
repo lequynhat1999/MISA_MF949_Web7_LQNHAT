@@ -100,9 +100,10 @@ export default {
      * CreatedBy: LQNHAT(31/08/2021)
      */
     selectDepartment(index) {
-      this.currentDepartmentId = this.options[index].DepartmentId;
-      this.keysearch = this.options[index].DepartmentName;
-      this.$emit("selectedDepartment", this.currentDepartmentId);
+      this.currentDepartmentId = this.departments[index].DepartmentId;
+      this.keysearch = this.departments[index].DepartmentName;
+      // emit value sang cho v-model
+      this.$emit("input", this.currentDepartmentId);
       this.isSearching = false;
       debugger; // eslint-disable-line
     },

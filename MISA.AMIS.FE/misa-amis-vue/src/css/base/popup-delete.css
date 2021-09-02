@@ -2,7 +2,7 @@
   background: url("../../assets/img/Sprites.64af8f61.svg") no-repeat -592px -456px;
   width: 48px;
   height: 48px;
-  margin-top: 6px;
+  margin-top: -2px;
   margin-left: 2px;
 }
 
@@ -22,4 +22,10 @@
 .hidden-delete
 {
     display: none;
+}
+
+.text-confirm-delete
+{
+  margin-left: 9px;
+  margin-top: 6px;
 }

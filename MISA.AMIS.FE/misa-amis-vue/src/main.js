@@ -32,6 +32,7 @@ Vue.component('paginate', Paginate)
 Vue.config.productionTip = false
 Vue.component('datepicker', DatePicker)
 Vue.use(VueAxios, axios)
+Vue.use(require('vue-shortkey'))
 new Vue({
   router,
   render: h => h(App),

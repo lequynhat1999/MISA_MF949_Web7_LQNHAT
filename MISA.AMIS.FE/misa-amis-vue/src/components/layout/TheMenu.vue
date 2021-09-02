@@ -5,12 +5,12 @@
       <div class="amis-icon"></div>
     </div>
     <div class="menu-content">
-      <router-link to="/overview" class="nav-item" title="Tổng quan" exact-active-class="icon-active;menu-active">
-        <div class="nav-item-icon nav-item-overview" exact-active-class="icon-active"></div>
+      <router-link to="/overview" class="nav-item" title="Tổng quan" exact-active-class="menu-active">
+        <div class="nav-item-icon nav-item-overview"></div>
         <div class="nav-item-text">Tổng quan</div>
       </router-link>
       <router-link to="/employee" class="nav-item" title="Nhân viên" active-class="menu-active">
-        <div class="nav-item-icon nav-item-money" active-class="icon-active"></div>
+        <div class="nav-item-icon nav-item-money"></div>
         <div class="nav-item-text">Nhân viên</div>
       </router-link>
       <div class="nav-item" title="Tiền gửi">

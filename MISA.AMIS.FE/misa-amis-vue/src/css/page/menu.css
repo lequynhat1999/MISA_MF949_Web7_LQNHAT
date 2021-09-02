@@ -62,7 +62,7 @@
   border-left: 6px solid #2ca01c;
 }
 
-.menu-active
+.menu-active 
 {
   background-color: rgba(235, 237, 240, 0.2);
   color: #ffffff;

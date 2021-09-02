@@ -2,7 +2,13 @@
   <div id="myModal" class="modal" :class="{ 'hidden-modal': isOpenModal }">
     <div class="modal-content">
       <div class="btn-top">
-        <div class="btn-close" title="Đóng(ESC)" @click="closeFormDetail"></div>
+        <div
+          class="btn-close"
+          v-shortkey="['esc']"
+          @shortkey="closeFormDetail"
+          title="Đóng (ESC)"
+          @click="closeFormDetail"
+        ></div>
         <div class="btn-help" title="Giúp(F1)"></div>
       </div>
       <div class="header-modal">
@@ -47,11 +53,11 @@
                       ref="txtEmployeeCode"
                       v-model="employee.EmployeeCode"
                       class="input-modal width-100"
-                      @blur="checkDuplicateEmployeeCode"
                       :class="{
                         'border-red': errors.length > 0 ? true : false,
                       }"
                       :title="errors[0]"
+                      @blur="checkDuplicateEmployeeCode"
                     />
                     <!-- <span style="color: red">{{ errors[0] }}</span> -->
                   </ValidationProvider>
@@ -149,8 +155,7 @@
                       :class="{
                         'border-red': errors.length > 0 ? true : false,
                       }"
-                      @selectedDepartment="getValueDepartment"
-                      :value="employee.DepartmentId"
+                      v-model="employee.DepartmentId"
                       :title="errors[0]"
                     />
                     <!-- <span style="color: red">{{ errors[0] }}</span> -->
@@ -325,12 +330,24 @@
           </button>
         </div>
         <div class="btn-save">
-          <button class="btn-white" @click="saveBtnClick">
+          <button
+            class="btn-white"
+            @click="saveBtnClick"
+            title="Cất (Ctrl + S)"
+            v-shortkey="['ctrl', 's']"
+            @shortkey="saveBtnClick"
+          >
             <div class="text-add">Cất</div>
           </button>
         </div>
         <div class="btn-save-add">
-          <button class="m-btn" @click="saveAddBtnClick">
+          <button
+            class="m-btn"
+            @click="saveAddBtnClick"
+            title="Cất và thêm (Ctrl + Shift + S)"
+            v-shortkey="['ctrl', 'shift', 's']"
+            @shortkey="saveAddBtnClick"
+          >
             <div class="text-add">Cất và thêm</div>
           </button>
         </div>
@@ -403,6 +420,7 @@ export default {
       // object ban đầu
       employeeOriginalAdd: {},
       employeeOriginalEdit: {},
+      employeeCodeDuplicate: "",
       // Id của nhân viên
       employeeId: "",
       // mode cho modal : 0 là add - 1 là edit
@@ -413,16 +431,15 @@ export default {
       isHiddenWarning: true,
       // lỗi validate
       textError: "",
+      isDuplicate: false,
     };
   },
   methods: {
-
     /**
      * Check trùng mã nhân viên
      * CreatedBy: LQNHAT(31/08/2021)
      */
-    checkDuplicateEmployeeCode()
-    {
+    checkDuplicateEmployeeCode() {
       var self = this;
       // binding data
       axios
@@ -434,7 +451,8 @@ export default {
               self.employee.EmployeeCode == item.EmployeeCode &&
               self.employee.EmployeeId != item.EmployeeId
             ) {
-              alert("Trùng mã nhân viên");
+              this.isDuplicate = true;
+              this.employeeCodeDuplicate = item.EmployeeCode;
             }
           });
         })
@@ -442,7 +460,7 @@ export default {
           console.log(res);
         });
     },
-    
+
     /**------------------------------------------------------------------------------
      * Sự kiện click nút X
      * CreatedBy: LQNHAT(30/08/2021)
@@ -486,14 +504,6 @@ export default {
       this.isHiddenWarning = true;
     },
 
-    /**---------------------------------------------------
-     * Gán value cho deapartmentId
-     * CreatedBy : LQNHAT(30/08/2021)
-     */
-     getValueDepartment(value) {
-       this.employee.DepartmentId = value;
-    },
-
     /**-------------------------------------------
      * Hàm đóng modal
      * CreatedBy: LQNHAT(28/08/2021)
@@ -516,7 +526,6 @@ export default {
         this.autoNewEmployeeCode();
       } else {
         this.bindDataToForm();
-        this.getEmployeeForCompare();
       }
     },
 
@@ -532,13 +541,21 @@ export default {
       this.employee.EmployeeId = "00000000-0000-0000-0000-000000000000";
     },
 
-    
-
     /*--------------------------------------------------
      * Hàm bắt sự kiện khi click btn Cất
      * CreatedBy : LQNHAT(28/08/2021)
      */
     saveBtnClick() {
+      // set errors
+      if (this.isDuplicate == true) {
+        this.$refs.form_employee.setErrors({
+          Code: [`Mã nhân viên đã tồn tại trong hệ thống`],
+        });
+        this.isDuplicate = false;
+        this.isHiddenWarning = false;
+        this.textError = `Mã nhân viên ${this.employeeCodeDuplicate} đã tồn tại trong hệ thống`;
+        return;
+      }
       this.$refs.popupConfirmSave.closePopupConfirmSave();
       this.$refs.form_employee.validate().then((success) => {
         if (!success) {
@@ -566,6 +583,16 @@ export default {
      * CreatedBy: LQNHAT(29/08/2021)
      */
     saveAddBtnClick() {
+      // set errors
+      if (this.isDuplicate == true) {
+        this.$refs.form_employee.setErrors({
+          Code: [`Mã nhân viên đã tồn tại trong hệ thống`],
+        });
+        this.isDuplicate = false;
+        this.isHiddenWarning = false;
+        this.textError = `Mã nhân viên ${this.employeeCodeDuplicate} đã tồn tại trong hệ thống`;
+        return;
+      }
       this.$refs.popupConfirmSave.closePopupConfirmSave();
       this.$refs.form_employee.validate().then((success) => {
         if (!success) {
@@ -597,6 +624,7 @@ export default {
      */
     showPopupWarning() {
       this.notifications = this.$refs.form_employee.errors;
+      console.log(this.notifications);
       if (this.notifications.Code.length > 0) {
         this.isHiddenWarning = false;
         this.textError = this.notifications.Code[0];
@@ -624,7 +652,6 @@ export default {
      * CreatedBy : LQNHAT(28/08/2021)
      */
     addEmployee() {
-      this.checkDuplicateEmployeeCode();
       var self = this;
       axios
         .post(`https://localhost:44383/api/v1/employees`, self.employee)
@@ -648,7 +675,6 @@ export default {
      * CreatedBy: LQNHAT(30/08/2021)
      */
     editEmployee() {
-      this.checkDuplicateEmployeeCode();
       var self = this;
       axios
         .put(
@@ -676,10 +702,7 @@ export default {
       axios
         .get(`https://localhost:44383/api/v1/employees/newEmployeeCode`)
         .then((res) => {
-          // let newEmployee = {};
-          // newEmployee.EmployeeCode = res.data;
-          // self.employee = newEmployee;
-          self.employee.EmployeeCode = res.data;
+          this.$set(self.employee, "EmployeeCode", res.data);
           self.employeeOriginalAdd.Gender = 1;
           self.employeeOriginalAdd.EmployeeCode = res.data;
           self.$nextTick(() => self.$refs.txtEmployeeCode.focus());
@@ -704,7 +727,7 @@ export default {
           self.employee.DateOfBirth = self.formatDate(res.data.DateOfBirth);
           self.employee.IdentityDate = self.formatDate(res.data.IdentityDate);
           // assign employee cho employeeOriginalEdit
-          Object.assign(this.employeeOriginalEdit,this.employee);
+          Object.assign(this.employeeOriginalEdit, this.employee);
         })
         .catch((error) => {
           console.log(error);

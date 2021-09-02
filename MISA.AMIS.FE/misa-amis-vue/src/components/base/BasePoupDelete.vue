@@ -5,10 +5,10 @@
   >
     <div class="modal-content-save">
       <div class="content-confirm-save">
-        <div class="title-popup flex">
-          <div class="img-confirm-delete"></div>
-          <div class="text-confirm-save">
-            Bạn có thực sự muốn xóa nhân viên có mã nhân viên {{ employee.EmployeeCode }} không?
+        <div class="title-popup title-popup-delete flex">
+          <div class="box-img"><div class="img-confirm-delete"></div></div>
+          <div class="text-confirm-delete">
+            Bạn có thực sự muốn xóa Nhân viên có mã nhân viên {{ employee.EmployeeCode }} không?
           </div>
         </div>
         <div class="btn-popup-save flex">
