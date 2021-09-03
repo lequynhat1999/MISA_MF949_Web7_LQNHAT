@@ -62,6 +62,7 @@ namespace MISA.AMIS.Infrastructure.Repository
         public object GetByPaging(int pageIndex, int pageSize, string positionId, string departmentId, string keysearch)
         {
             keysearch = keysearch == null ? string.Empty : keysearch;
+            // add vào param
             var param = new DynamicParameters();
             param.Add("@keysearch", keysearch);
             param.Add("@positionId", positionId);

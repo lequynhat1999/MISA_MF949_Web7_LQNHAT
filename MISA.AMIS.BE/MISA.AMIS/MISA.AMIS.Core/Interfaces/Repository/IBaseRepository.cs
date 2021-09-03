@@ -49,6 +49,11 @@ namespace MISA.AMIS.Core.Interfaces.Repository
         /// CreatedBy:LQNhat(27/08/2021)
         int Delete(Guid entityId);
 
+        /// <summary>
+        /// Xóa nhiều đối tượng trong db
+        /// </summary>
+        /// <param name="entitesId">mảng các đối tượng muốn xóa</param>
+        /// <returns>True or false</returns>
         bool DeleteEntites(List<Guid> entitesId);
 
         /// <summary>

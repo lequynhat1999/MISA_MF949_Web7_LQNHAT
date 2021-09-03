@@ -19,7 +19,7 @@ namespace MISA.AMIS.Core.Entities
         /// <summary>
         /// Mã nhân viên
         /// </summary>
-        /// CreatedBy : LP(26/8)
+        /// CreatedBy : LQNHAT(27/08/2021)
         [Required]
         [CheckExist]
         [Name("Mã nhân viên")]

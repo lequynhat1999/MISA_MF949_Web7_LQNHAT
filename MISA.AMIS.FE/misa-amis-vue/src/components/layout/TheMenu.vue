@@ -5,13 +5,41 @@
       <div class="amis-icon"></div>
     </div>
     <div class="menu-content">
-      <router-link to="/overview" class="nav-item" title="Tổng quan" exact-active-class="menu-active">
+      <!-- <router-link to="/overview" class="nav-item" title="Tổng quan" exact-active-class="menu-active">
         <div class="nav-item-icon nav-item-overview"></div>
         <div class="nav-item-text">Tổng quan</div>
       </router-link>
       <router-link to="/employee" class="nav-item" title="Nhân viên" active-class="menu-active">
         <div class="nav-item-icon nav-item-money"></div>
         <div class="nav-item-text">Nhân viên</div>
+      </router-link> -->
+      <router-link to="/overview">
+        <div
+          class="nav-item"
+          title="Tổng quan"
+          @click="selectItemMenu"
+          :class="{ 'nav-item-active ': !isActive }"
+        >
+          <div
+            class="nav-item-icon nav-item-overview"
+            :class="{ 'nav-item-icon-active': !isActive }"
+          ></div>
+          <div class="nav-item-text">Tổng quan</div>
+        </div>
+      </router-link>
+      <router-link to="/employee">
+        <div
+          class="nav-item"
+          title="Nhân viên"
+          @click="selectItemMenu"
+          :class="{ 'nav-item-active ': isActive }"
+        >
+          <div
+            class="nav-item-icon nav-item-money"
+            :class="{ 'nav-item-icon-active': isActive }"
+          ></div>
+          <div class="nav-item-text">Nhân viên</div>
+        </div>
       </router-link>
       <div class="nav-item" title="Tiền gửi">
         <div class="nav-item-icon nav-item-deposits"></div>

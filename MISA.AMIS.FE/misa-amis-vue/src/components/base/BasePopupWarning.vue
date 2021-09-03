@@ -1,11 +1,17 @@
 <template>
-<div class="modal-confirm-save" :class="{'hidden-warning' : isHiddenWarning}">
+  <div
+    class="modal-confirm-save"
+    :class="{ 'hidden-warning': isHiddenWarning }"
+  >
     <div class="modal-content-save">
       <div class="content-confirm-save">
         <div class="title-popup flex">
-          <div class="img-warning"></div>
+          <div class="box-img-warning flex">
+            <div :class="{'img-warning' : isError}"></div>
+            <div :class="{'img-confirm-delete' : !isError}"></div>
+          </div>
           <div class="text-confirm-save">
-            {{textError}}
+            {{ textError }}
           </div>
         </div>
         <div class="btn-popup-save">
@@ -17,22 +23,20 @@
         </div>
       </div>
     </div>
-  </div>  
+  </div>
 </template>
 
 <script>
 export default {
-    name:"PopupWarning",
-    props:["isHiddenWarning","textError"],
-    methods: {
-        closeWarning()
-        {
-            this.$emit("closeWarning");
-        }
+  name: "PopupWarning",
+  props: ["isHiddenWarning", "textError","isError"],
+  methods: {
+    closeWarning() {
+      this.$emit("closeWarning");
     },
-}
+  },
+};
 </script>
 
 <style>
-
 </style>

@@ -46,17 +46,6 @@ export default {
     };
   },
 
-  //   watch: {
-  //     async value() {
-  //       // wait get full options
-  //       this.items = [];
-  //       await this.getItem();
-  //       let i = this.getIndexByValue();
-  //       if (i != -1) this.selectItem(i);
-  //       else this.selectItem(0);
-  //     },
-  //   },
-
   methods: {
     /**--------------------------------------------------------------------
      * Hàm bắt sự kiện click gửi value sang cho bên employeeDetail

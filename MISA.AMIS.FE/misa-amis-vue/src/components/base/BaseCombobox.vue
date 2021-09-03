@@ -64,8 +64,6 @@ export default {
   },
   watch: {
     keysearch() {
-      console.log(this.departments);
-      console.log(this.options);
       this.searchByKeysearch();
     },
     value()
@@ -105,7 +103,6 @@ export default {
       // emit value sang cho v-model
       this.$emit("input", this.currentDepartmentId);
       this.isSearching = false;
-      debugger; // eslint-disable-line
     },
 
     /**-----------------------------------------------------------------------
@@ -122,8 +119,10 @@ export default {
         this.isHiddenCombobox = true;
         this.isRotate = false;
       }
+      // check nếu keysearch có giá trị
       if (this.keysearch != null && this.keysearch.length > 0) {
         this.departments = [];
+        // filter
         this.options.forEach((element) => {
           if (
             element.DepartmentName.toLowerCase().includes(
@@ -138,6 +137,7 @@ export default {
         });
         this.isSearching = true;
       } else {
+        // nếu keysearch null thì clear
         this.currentDepartmentId = null;
         this.keysearch = null;
         this.departments = this.options;
@@ -151,6 +151,7 @@ export default {
      */
     setValueDepartment() {
       let flag = false;
+      // filter trong mảng options
       this.options.forEach((element) => {
         if (element.DepartmentId == this.value) {
           this.currentDepartmentId = this.value;
@@ -158,6 +159,7 @@ export default {
           flag = true;
         }
       });
+      // nếu departmentId null
       if (!flag) {
         this.currentDepartmentId = null;
         this.keysearch = null;
@@ -171,9 +173,11 @@ export default {
      */
     close(e) {
       if (!this.$el.contains(e.target)) {
+        // check currentDepartmentId có giá trị
         if(this.currentDepartmentId != null)
         {
           let flag = false;
+          // gán value cho keysearch
           this.options.forEach(element => {
             if(element.DepartmentId == this.currentDepartmentId)
             {
@@ -181,6 +185,7 @@ export default {
               flag = true;
             }
           });
+          // nếu không thì keysearch null
           if(!flag)
           {
             this.currentDepartmentId = null;

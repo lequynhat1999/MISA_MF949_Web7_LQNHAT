@@ -61,6 +61,10 @@ export default {
       this.employeeId = employee.EmployeeId;
     },
 
+    /**------------------------------------------------------------------------
+     * Xác nhận xóa nhân viên
+     * CreatedBy: LQNHAT(29/08/2021)
+     */
     confirmDelete() {
       var self = this;
       axios
@@ -70,6 +74,7 @@ export default {
             timeout: 2000,
           });
           self.isHiddenDelete = true;
+          // load lại table
           self.$emit("reloadTableAndFilter");
           console.log(res);
         });

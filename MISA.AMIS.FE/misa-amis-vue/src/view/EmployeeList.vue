@@ -248,26 +248,130 @@ export default {
   },
 
   methods: {
+    /*-----------------------------------------------------------------
+     *Lấy ra danh sách nhân viên theo các tiêu chí và phân trang
+     *CreateBy: LQNhat(28/08/2021)
+     */
+    getEmployeesByFilter() {
+      var self = this;
+      self.isLoading = true;
+      axios
+        .get(
+          `https://localhost:44383/api/v1/employees/filter?pageIndex=${this.pageIndex}
+        &pageSize=${this.pageSize}&keysearch=${this.keysearch}`
+        )
+        .then((res) => {
+          // lấy ra mảng employees
+          self.employees = res.data.Data;
+          // lấy ra số lượng bản ghi
+          self.amountPage = res.data.TotalRecord;
+          // lấy ra số lượng trang
+          self.numPages = res.data.TotalPage;
+          self.isLoading = false;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+
+    /**-------------------------------------------------------
+     * Reload lại data của table
+     * CreatedBy: LQNHAT(28/08/2021)
+     */
+    reloadTableAndFilter() {
+      var self = this;
+      // self.pageIndex = 1;
+      // self.$refs.textDropdownPaging.setTextDefault();
+      self.isLoading = true;
+      axios
+        .get(
+          `https://localhost:44383/api/v1/employees/filter?pageIndex=${this.pageIndex}
+            &pageSize=${this.pageSize}
+          `
+        )
+        .then((res) => {
+          // lấy ra mảng employees
+          self.employees = res.data.Data;
+          // lấy ra tổng số bản ghi
+          self.amountPage = res.data.TotalRecord;
+          // lấy ra tổng số trang
+          self.numPages = res.data.TotalPage;
+          // trỏ về trang đầu tiên
+          self.$refs.pagination.selectFirstPage();
+          // keysearch null
+          self.keysearch = "";
+          self.isLoading = false;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+
+    /**--------------------------------------------------
+     * Set value cho pageSize
+     * CreatedBy: LQNHAT(28/08/2021)
+     */
+    getValPageSize(valuePageSize) {
+      this.pageSize = valuePageSize;
+      this.getEmployeesByFilter(this.pageIndex, this.pageSize, this.keysearch);
+    },
+
+    /**--------------------------------------------------------------------------
+     * Sự kiện click vào page
+     * CreatedBy: LQNHAT(31/08/2021)
+     */
+    clickPaging(pageNum) {
+      this.pageIndex = pageNum;
+      this.getEmployeesByFilter(this.pageIndex, this.pageSize, this.keysearch);
+    },
+
+    /**-----------------------------------------------------------
+     * Hàm bắt sự kiện khi có text thì search theo text
+     * CreateBy: LQNhat(30/07/2021)
+     */
+    searchByKeysearch() {
+      if (this.keysearch == "") {
+        this.reloadTableAndFilter();
+      } else {
+        this.pageIndex = 1;
+        this.getEmployeesByFilter(
+          this.pageIndex,
+          this.pageSize,
+          this.keysearch
+        );
+      }
+    },
+
+    /**--------------------------------------------------------------------------
+     * Set value deafault cho dropdown paging
+     * CreatedBy: LQNHAT(28/08/2021)
+     */
+    setValueDefaultDropdown(value) {
+      this.pageSize = value;
+    },
+
     /**----------------------------------------------------------------------------
      * Mở context menu
      * CreatedBy: LQNHAT(01/09/2021)
      */
     openContextMenu(event, index) {
       let target = event.currentTarget;
+      // nếu mà đang ở dòng cuối cùng trong bảng
       if (index == this.pageSize - 1) {
         this.contextMenu = {
           isShow: true,
           positionX: target.getBoundingClientRect().x - 83 + "px",
           positionY: target.getBoundingClientRect().y - 90 + "px",
         };
-      } else {
+      }
+      // các dòng trong bảng 
+      else {
         this.contextMenu = {
           isShow: true,
           positionX: target.getBoundingClientRect().x - 83 + "px",
           positionY: target.getBoundingClientRect().y + 20 + "px",
         };
       }
-
       this.selectedRow = index;
     },
 
@@ -303,15 +407,6 @@ export default {
       }
     },
 
-    /**--------------------------------------------------------------------------
-     * Sự kiện click vào page
-     * CreatedBy: LQNHAT(31/08/2021)
-     */
-    clickPaging(pageNum) {
-      this.pageIndex = pageNum;
-      this.getEmployeesByFilter(this.pageIndex, this.pageSize, this.keysearch);
-    },
-
     /**------------------------------------------------------------------------
      * Xuất khẩu nhân viên
      * CreatedBy:LQNHAT(31/08/2021)
@@ -328,59 +423,6 @@ export default {
           self.$toast.success("Xuất khẩu nhân viên thành công", {
             timeout: 2000,
           });
-          self.isLoading = false;
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
-    /*-----------------------------------------------------------------
-     *Lấy ra danh sách nhân viên theo các tiêu chí và phân trang
-     *CreateBy: LQNhat(14/08/2021)
-     */
-    getEmployeesByFilter() {
-      var self = this;
-      self.isLoading = true;
-      axios
-        .get(
-          `https://localhost:44383/api/v1/employees/filter?pageIndex=${this.pageIndex}
-        &pageSize=${this.pageSize}&keysearch=${this.keysearch}`
-        )
-        .then((res) => {
-          self.employees = res.data.Data;
-          self.employees.forEach((employee) => {
-            employee.Option = false;
-          });
-          self.amountPage = res.data.TotalRecord;
-          self.numPages = res.data.TotalPage;
-          self.isLoading = false;
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
-
-    /**-------------------------------------------------------
-     * Load data lên table
-     * CreatedBy: LQNHAT(28/08/2021)
-     */
-    reloadTableAndFilter() {
-      var self = this;
-      // self.pageIndex = 1;
-      // self.$refs.textDropdownPaging.setTextDefault();
-      self.isLoading = true;
-      axios
-        .get(
-          `https://localhost:44383/api/v1/employees/filter?pageIndex=${this.pageIndex}
-            &pageSize=${this.pageSize}
-          `
-        )
-        .then((res) => {
-          self.employees = res.data.Data;
-          self.amountPage = res.data.TotalRecord;
-          self.numPages = res.data.TotalPage;
-          self.$refs.pagination.selectFirstPage();
-          self.keysearch = "";
           self.isLoading = false;
         })
         .catch((error) => {
@@ -407,30 +449,6 @@ export default {
       this.isOpenModal = !this.isOpenModal;
       this.$refs.modeForm.cloneToEmployee(employee);
       this.closeContextMenu();
-    },
-
-    /**
-     * Set value deafault cho dropdown paging
-     */
-    setValueDefaultDropdown(value) {
-      this.pageSize = value;
-    },
-
-    /**-----------------------------------------------------------
-     * Hàm bắt sự kiện khi có text thì search theo text
-     * CreateBy: LQNhat(30/07/2021)
-     */
-    searchByKeysearch() {
-      if (this.keysearch == "") {
-        this.reloadTableAndFilter();
-      } else {
-        this.pageIndex = 1;
-        this.getEmployeesByFilter(
-          this.pageIndex,
-          this.pageSize,
-          this.keysearch
-        );
-      }
     },
 
     /**------------------------------------------------
@@ -460,15 +478,6 @@ export default {
       this.isOpenModal = !this.isOpenModal;
       this.modeFormDetail = 1;
       this.$refs.modeForm.show(this.modeFormDetail, this.employeeId);
-    },
-
-    /**--------------------------------------------------
-     * Set value cho pageSize
-     * CreatedBy: LQNHAT(28/08/2021)
-     */
-    getValPageSize(valuePageSize) {
-      this.pageSize = valuePageSize;
-      this.getEmployeesByFilter(this.pageIndex, this.pageSize, this.keysearch);
     },
 
     /**----------------------------------------------------------

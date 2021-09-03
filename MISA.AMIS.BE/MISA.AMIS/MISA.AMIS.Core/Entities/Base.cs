@@ -27,15 +27,6 @@ namespace MISA.AMIS.Core.Entities
     }
 
     /// <summary>
-    /// Cờ check khóa chính
-    /// </summary>
-    [AttributeUsage(AttributeTargets.Property)]
-    public class PrimaryKey : Attribute
-    {
-
-    }
-
-    /// <summary>
     /// Cờ check định dạng email
     /// </summary>
     [AttributeUsage(AttributeTargets.Property)]
