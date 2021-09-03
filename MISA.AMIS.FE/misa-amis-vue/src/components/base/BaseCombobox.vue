@@ -1,7 +1,7 @@
 <template>
   <div class="combobox">
     <div class="combobox-search flex">
-      <input type="text" class="width-100" v-model="keysearch" />
+      <input type="text" class="width-100" v-model="keysearch"  />
       <div
         class="combobox-icon"
         :class="{ rotate: !isHiddenCombobox }"
@@ -52,7 +52,9 @@ export default {
       options: [],
       // text input
       keysearch: null,
+      // departmentId hiện tại
       currentDepartmentId: "",
+      // check có đang search hay k
       isSearching: true,
     };
   },
@@ -183,6 +185,7 @@ export default {
             {
               this.keysearch = element.DepartmentName;
               flag = true;
+              this.isHiddenCombobox = true;
             }
           });
           // nếu không thì keysearch null

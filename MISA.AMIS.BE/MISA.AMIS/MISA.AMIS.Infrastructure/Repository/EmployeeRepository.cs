@@ -73,7 +73,9 @@ namespace MISA.AMIS.Infrastructure.Repository
             param.Add("@totalPage", dbType: DbType.Int32, direction: ParameterDirection.Output);
 
             var employees = _dbConnection.Query<Employee>("Proc_GetEmployeesByPaging", param: param, commandType: CommandType.StoredProcedure);
+            // tổng số trang
             var totalPage = param.Get<int>("@totalPage");
+            // tổng số bản ghi
             var toatalRecord = param.Get<int>("@totalRecord");
 
             var employeesFilter = new

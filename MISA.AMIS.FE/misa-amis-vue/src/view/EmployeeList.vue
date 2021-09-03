@@ -35,7 +35,7 @@
           ></div>
           <div
             class="export"
-            title="Xuất ra excel"
+            title="Xuất khẩu dữ liệu ra file excel"
             @click="exportEmployee"
           ></div>
         </div>
@@ -79,7 +79,7 @@
                   {{ employee.FullName }}
                 </td>
                 <td>{{ employee.GenderName }}</td>
-                <td style="text-align: center">
+                <td style="text-align:center">
                   {{ formatDate(employee.DateOfBirth) }}
                 </td>
                 <td>{{ employee.IdentityNumber }}</td>

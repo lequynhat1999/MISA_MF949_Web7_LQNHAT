@@ -39,7 +39,7 @@
           <div class="row width-100 flex">
             <div class="row-wrapper width-50 flex">
               <div class="row-left width-100 flex">
-                <div class="input pdr-8 width-35">
+                <div class="input pdr-8 width-35" >
                   <div class="text-modal">
                     <b>Mã <span style="color: red">*</span></b>
                   </div>
@@ -62,7 +62,7 @@
                     />
                   </ValidationProvider>
                 </div>
-                <div class="input width-60">
+                <div class="input width-60" >
                   <div class="text-modal">
                     <b>Tên <span style="color: red">*</span></b>
                   </div>
