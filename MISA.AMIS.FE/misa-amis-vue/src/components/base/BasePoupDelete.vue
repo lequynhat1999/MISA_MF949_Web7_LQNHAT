@@ -8,7 +8,7 @@
         <div class="title-popup title-popup-delete flex">
           <div class="box-img"><div class="img-confirm-delete"></div></div>
           <div class="text-confirm-delete">
-            Bạn có thực sự muốn xóa Nhân viên có mã nhân viên {{ employee.EmployeeCode }} không?
+            {{ msg }}
           </div>
         </div>
         <div class="btn-popup-save flex">
@@ -30,6 +30,8 @@
 
 <script>
 import axios from "axios";
+import { URL_API, MESSAGE } from "../../js/const.js";
+import stringInject from "stringinject";
 export default {
   name: "BasePopupConfirmSave",
   data() {
@@ -40,6 +42,7 @@ export default {
       employee: {},
       // id nhân viên
       employeeId: "",
+      msg: "",
     };
   },
   methods: {
@@ -59,6 +62,7 @@ export default {
       this.isHiddenDelete = false;
       this.employee = employee;
       this.employeeId = employee.EmployeeId;
+      this.msg = stringInject(MESSAGE.CONFIRM_DELETE, [employee.EmployeeCode]);
     },
 
     /**------------------------------------------------------------------------
@@ -67,17 +71,34 @@ export default {
      */
     confirmDelete() {
       var self = this;
-      axios
-        .delete(`https://localhost:44383/api/v1/employees/${this.employeeId}`)
-        .then((res) => {
-          self.$toast.success("Xóa nhân viên thành công", {
-            timeout: 2000,
+      try {
+        axios
+          .delete(URL_API.API_EMPLOYEE + "/" + self.employeeId)
+          .then((res) => {
+            if (res.status == 200) {
+              self.$toast.success(MESSAGE.SUCCESS_DELETE, {
+                timeout: 2000,
+              });
+              self.isHiddenDelete = true;
+              // load lại table
+              self.$emit("reloadTableAndFilter");
+            }
+            else
+            {
+              this.$toast.error(MESSAGE.ERROR_DELETE, {
+                timeout: 2000,
+              });
+            }
+          })
+          .catch((err) => {
+            console.log(err);
           });
-          self.isHiddenDelete = true;
-          // load lại table
-          self.$emit("reloadTableAndFilter");
-          console.log(res);
+      } catch (error) {
+        console.log(error);
+        this.$toast.error(MESSAGE.EXCEPTION_MSG, {
+          timeout: 2000,
         });
+      }
     },
   },
 };

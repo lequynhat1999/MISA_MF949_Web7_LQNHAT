@@ -17,6 +17,11 @@
     background-color: #35bf22;
 }
 
+.m-btn:focus
+{
+  background-color: #35bf22;
+}
+
 .m-btn:active
 {
     background-color: #2ca01c;
@@ -38,6 +43,11 @@
 }
 
 .btn-white:hover
+{
+  background-color: #d2d3d6;
+}
+
+.btn-white:focus
 {
   background-color: #d2d3d6;
 }

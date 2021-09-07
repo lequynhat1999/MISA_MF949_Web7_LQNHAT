@@ -80,8 +80,6 @@ namespace MISA.AMIS.Infrastructure.Repository
             // thêm dữ liệu vào db
             var sqlQuery = $"INSERT INTO {_tableName}({columnsName}) VALUES({columnsParam}) ";
             var result = _dbConnection.Execute(sqlQuery, param: param);
-            //transaction.Commit();
-
             return result;
         }
 
@@ -98,7 +96,6 @@ namespace MISA.AMIS.Infrastructure.Repository
             parameters.Add("@entityIdParam", entityId);
             var sqlQuery = $"DELETE FROM {_tableName} WHERE {_tableName}Id = @entityIdParam";
             var result = _dbConnection.Execute(sqlQuery, param: parameters);
-            //transaction.Commit();
             return result;
         }
 
@@ -156,11 +153,9 @@ namespace MISA.AMIS.Infrastructure.Repository
         /// CreatedBy:LQNhat(26/08/2021)
         public int Update(TEntity entity, Guid entityId)
         {
-            _dbConnection.Open();
             var entityCurrent = GetById(entityId);
             if (entityCurrent != null)
             {
-                var transaction = _dbConnection.BeginTransaction();
                 var columnsName = string.Empty;
                 var param = new DynamicParameters();
                 var properties = entity.GetType().GetProperties();
@@ -186,8 +181,7 @@ namespace MISA.AMIS.Infrastructure.Repository
 
                 // sửa dữ liệu
                 var sqlQuery = $"UPDATE {_tableName} SET {columnsName} WHERE {_tableName}Id = '{entityId}'";
-                var result = _dbConnection.Execute(sqlQuery, transaction: transaction, param: param);
-                transaction.Commit();
+                var result = _dbConnection.Execute(sqlQuery, param: param);
                 return result;
             }
             else

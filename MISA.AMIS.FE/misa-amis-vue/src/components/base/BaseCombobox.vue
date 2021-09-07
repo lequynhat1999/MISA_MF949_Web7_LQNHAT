@@ -1,7 +1,12 @@
 <template>
   <div class="combobox">
     <div class="combobox-search flex">
-      <input type="text" class="width-100" v-model="keysearch"  />
+      <input
+        type="text"
+        class="width-100"
+        v-model="keysearch"
+        :tabindex="tabIndex"
+      />
       <div
         class="combobox-icon"
         :class="{ rotate: !isHiddenCombobox }"
@@ -39,9 +44,10 @@
 
 <script>
 import axios from "axios";
+import { URL_API } from "../../js/const.js"
 export default {
   name: "Combobox",
-  props: ["value"],
+  props: ["value", "tabIndex"],
   data() {
     return {
       // trạng thái của combobox
@@ -59,7 +65,7 @@ export default {
     };
   },
   created() {
-     this.getDepartment();
+    this.getDepartment();
   },
   mounted() {
     document.addEventListener("click", this.close);
@@ -68,10 +74,9 @@ export default {
     keysearch() {
       this.searchByKeysearch();
     },
-    value()
-    {
-     this.setValueDepartment();
-    }
+    value() {
+      this.setValueDepartment();
+    },
   },
   methods: {
     /*----------------------------------------------------
@@ -89,7 +94,7 @@ export default {
      */
     getDepartment() {
       var self = this;
-      axios.get(`https://localhost:44383/api/v1/departments`).then((res) => {
+      axios.get(URL_API.API_DEPARTMENT).then((res) => {
         self.departments = res.data;
         self.options = res.data;
       });
@@ -176,27 +181,22 @@ export default {
     close(e) {
       if (!this.$el.contains(e.target)) {
         // check currentDepartmentId có giá trị
-        if(this.currentDepartmentId != null)
-        {
+        if (this.currentDepartmentId != null) {
           let flag = false;
           // gán value cho keysearch
-          this.options.forEach(element => {
-            if(element.DepartmentId == this.currentDepartmentId)
-            {
+          this.options.forEach((element) => {
+            if (element.DepartmentId == this.currentDepartmentId) {
               this.keysearch = element.DepartmentName;
               flag = true;
               this.isHiddenCombobox = true;
             }
           });
           // nếu không thì keysearch null
-          if(!flag)
-          {
+          if (!flag) {
             this.currentDepartmentId = null;
             this.keysearch = null;
           }
-        }
-        else
-        {
+        } else {
           this.keysearch = null;
         }
         this.isHiddenCombobox = true;

@@ -23,7 +23,7 @@
               class="input-search"
               placeholder="Tìm kiếm theo Mã, Tên nhân viên"
               v-model="keysearch"
-              @input="searchByKeysearch"
+              @keyup.enter="searchByKeysearch"
             />
             <div class="icon-search"></div>
           </div>
@@ -79,7 +79,7 @@
                   {{ employee.FullName }}
                 </td>
                 <td>{{ employee.GenderName }}</td>
-                <td style="text-align:center">
+                <td style="text-align: center">
                   {{ formatDate(employee.DateOfBirth) }}
                 </td>
                 <td>{{ employee.IdentityNumber }}</td>
@@ -112,9 +112,7 @@
                 </td>
               </tr>
               <tr v-if="employees.length == 0 ? true : false">
-                <td colspan="12" style="text-align: center">
-                  Không có dữ liệu để hiển thị
-                </td>
+                <td colspan="9" style="text-align: center">Không có dữ liệu</td>
               </tr>
             </tbody>
           </table>
@@ -185,6 +183,7 @@ import EmployeeDetail from "./EmployeeDetail.vue";
 import Dropdown from "../components/base/BaseDropdown.vue";
 import Loading from "../components/base/BaseLoading.vue";
 import PopupDelete from "../components/base/BasePoupDelete.vue";
+import { URL_API, MESSAGE } from "../js/const.js";
 import axios from "axios";
 import moment from "moment";
 export default {
@@ -254,24 +253,42 @@ export default {
      */
     getEmployeesByFilter() {
       var self = this;
-      self.isLoading = true;
-      axios
-        .get(
-          `https://localhost:44383/api/v1/employees/filter?pageIndex=${this.pageIndex}
-        &pageSize=${this.pageSize}&keysearch=${this.keysearch}`
-        )
-        .then((res) => {
-          // lấy ra mảng employees
-          self.employees = res.data.Data;
-          // lấy ra số lượng bản ghi
-          self.amountPage = res.data.TotalRecord;
-          // lấy ra số lượng trang
-          self.numPages = res.data.TotalPage;
-          self.isLoading = false;
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      try {
+        self.isLoading = true;
+        axios
+          .get(
+            URL_API.API_EMPLOYEE +
+              "/filter?pageIndex=" +
+              self.pageIndex +
+              "&pageSize=" +
+              self.pageSize +
+              "&keysearch=" +
+              self.keysearch
+          )
+          .then((res) => {
+            if (res.status == 200) {
+              // lấy ra mảng employees
+              self.employees = res.data.Data;
+              // lấy ra số lượng bản ghi
+              self.amountPage = res.data.TotalRecord;
+              // lấy ra số lượng trang
+              self.numPages = res.data.TotalPage;
+              self.isLoading = false;
+            } else {
+              this.$toast.error(MESSAGE.ERROR_LOAD_DATA, {
+                timeout: 2000,
+              });
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      } catch (error) {
+        console.log(error);
+        this.$toast.error(MESSAGE.EXCEPTION_MSG, {
+              timeout: 2000,
+            });
+      }
     },
 
     /**-------------------------------------------------------
@@ -280,31 +297,44 @@ export default {
      */
     reloadTableAndFilter() {
       var self = this;
-      // self.pageIndex = 1;
-      // self.$refs.textDropdownPaging.setTextDefault();
-      self.isLoading = true;
-      axios
-        .get(
-          `https://localhost:44383/api/v1/employees/filter?pageIndex=${this.pageIndex}
-            &pageSize=${this.pageSize}
-          `
-        )
-        .then((res) => {
-          // lấy ra mảng employees
-          self.employees = res.data.Data;
-          // lấy ra tổng số bản ghi
-          self.amountPage = res.data.TotalRecord;
-          // lấy ra tổng số trang
-          self.numPages = res.data.TotalPage;
-          // trỏ về trang đầu tiên
-          self.$refs.pagination.selectFirstPage();
-          // keysearch null
-          self.keysearch = "";
-          self.isLoading = false;
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      try {
+        self.isLoading = true;
+        axios
+          .get(
+            URL_API.API_EMPLOYEE +
+              "/filter?pageIndex=" +
+              self.pageIndex +
+              "&pageSize=" +
+              self.pageSize
+          )
+          .then((res) => {
+            if (res.status == 200) {
+              // lấy ra mảng employees
+              self.employees = res.data.Data;
+              // lấy ra tổng số bản ghi
+              self.amountPage = res.data.TotalRecord;
+              // lấy ra tổng số trang
+              self.numPages = res.data.TotalPage;
+              // trỏ về trang đầu tiên
+              self.$refs.pagination.selectFirstPage();
+              // keysearch null
+              self.keysearch = "";
+              self.isLoading = false;
+            } else {
+              this.$toast.error(MESSAGE.ERROR_LOAD_DATA, {
+                timeout: 2000,
+              });
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      } catch (error) {
+        console.log(error);
+        this.$toast.error(MESSAGE.EXCEPTION_MSG, {
+              timeout: 2000,
+            });
+      }
     },
 
     /**--------------------------------------------------
@@ -364,7 +394,7 @@ export default {
           positionY: target.getBoundingClientRect().y - 90 + "px",
         };
       }
-      // các dòng trong bảng 
+      // các dòng trong bảng
       else {
         this.contextMenu = {
           isShow: true,
@@ -413,21 +443,35 @@ export default {
      */
     exportEmployee() {
       var self = this;
-      self.isLoading = true;
-      axios
-        .get(`https://localhost:44383/api/v1/employees/export`)
-        .then((res) => {
-          console.log(res.data);
-          // download file excel về máy
-          window.location = res.data.Data;
-          self.$toast.success("Xuất khẩu nhân viên thành công", {
-            timeout: 2000,
+      try {
+        self.isLoading = true;
+        axios
+          .get(URL_API.API_EMPLOYEE + "/export")
+          .then((res) => {
+            if (res.status == 200) {
+              // download file excel về máy
+              window.location = res.data.Data;
+              self.$toast.success(MESSAGE.SUCCESS_EXPORT, {
+                timeout: 2000,
+              });
+              self.isLoading = false;
+            }
+            else
+            {
+              self.$toast.error(MESSAGE.ERROR_EXPORT, {
+                timeout: 2000,
+              });
+            }
+          })
+          .catch((error) => {
+            console.log(error);
           });
-          self.isLoading = false;
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      } catch (error) {
+        console.log(error);
+        this.$toast.error(MESSAGE.EXCEPTION_MSG, {
+              timeout: 2000,
+            });
+      }
     },
 
     /**---------------------------------------------------------

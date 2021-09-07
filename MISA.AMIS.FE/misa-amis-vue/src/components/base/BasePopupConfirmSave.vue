@@ -5,7 +5,7 @@
         <div class="title-popup flex">
           <div class="img-confirm-save"></div>
           <div class="text-confirm-save">
-            Dữ liệu đã bị thay đổi. Bạn có muốn cất không?
+            {{msg}}
           </div>
         </div>
         <div class="btn-popup-save flex">
@@ -31,11 +31,13 @@
 </template>
 
 <script>
+import { MESSAGE } from "../../js/const.js"
 export default {
   name: "BasePopupConfirmSave",
   data() {
     return {
       isHiddenPopupSave: true,
+      msg: MESSAGE.CHECK_DATA_CHANGE,
     }
   },
   methods: {

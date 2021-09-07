@@ -61,7 +61,7 @@ namespace MISA.AMIS.Core.Services
                     workSheet.Cells["A2:I2"].Merge = true;
 
                     // custom thead bảng excel
-                    workSheet.Row(3).Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                    workSheet.Row(3).Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
                     workSheet.Row(3).Style.Font.Bold = true;
                     workSheet.Row(3).Style.Font.Name = "Arial";
                     workSheet.Row(3).Style.Font.Size = 10;
@@ -81,6 +81,8 @@ namespace MISA.AMIS.Core.Services
                     workSheet.Cells[3, 8].Value = "Số tài khoản";
                     workSheet.Cells[3, 9].Value = "Tên ngân hàng";
 
+                    workSheet.Cells[3, 5].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+
                     // lấy danh sách nhân viên
                     var employees = _employeeRepository.Get();
                     int row = 4;
@@ -92,15 +94,15 @@ namespace MISA.AMIS.Core.Services
                         workSheet.Cells[row, 2].Value = employee.EmployeeCode;
                         workSheet.Cells[row, 3].Value = employee.FullName;
                         workSheet.Cells[row, 4].Value = employee.GenderName;
-                        workSheet.Cells[row, 5].Value = Convert.ToDateTime(employee.DateOfBirth).ToString("dd/MM/yyyy");
+                        workSheet.Cells[row, 5].Value = employee.DateOfBirth != null ? Convert.ToDateTime(employee.DateOfBirth).ToString("dd/MM/yyyy") : "";
                         workSheet.Cells[row, 6].Value = employee.PositionName;
                         workSheet.Cells[row, 7].Value = employee.DepartmentName;
                         workSheet.Cells[row, 8].Value = employee.AccountNumber;
                         workSheet.Cells[row, 9].Value = employee.BankName;
 
-                        // custom column stt và column dob
+                        // custom column dob và column stt
+                        workSheet.Cells[row, 5].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                         workSheet.Cells[row, 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
-                        workSheet.Cells[row, 5].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
 
                         // custom cỡ chữ cho row
                         workSheet.Row(row).Style.Font.Name = "Times New Roman";

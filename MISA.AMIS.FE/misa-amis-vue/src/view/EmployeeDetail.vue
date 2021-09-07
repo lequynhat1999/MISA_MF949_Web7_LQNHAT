@@ -39,7 +39,7 @@
           <div class="row width-100 flex">
             <div class="row-wrapper width-50 flex">
               <div class="row-left width-100 flex">
-                <div class="input pdr-8 width-35" >
+                <div class="input pdr-8 width-35">
                   <div class="text-modal">
                     <b>Mã <span style="color: red">*</span></b>
                   </div>
@@ -52,6 +52,7 @@
                       type="text"
                       ref="txtEmployeeCode"
                       v-model="employee.EmployeeCode"
+                      tabindex="1"
                       maxlength="255"
                       class="input-modal width-100"
                       :class="{
@@ -62,7 +63,7 @@
                     />
                   </ValidationProvider>
                 </div>
-                <div class="input width-60" >
+                <div class="input width-60">
                   <div class="text-modal">
                     <b>Tên <span style="color: red">*</span></b>
                   </div>
@@ -75,6 +76,7 @@
                       type="text"
                       class="input-modal width-100"
                       maxlength="255"
+                      tabindex="2"
                       v-model="employee.FullName"
                       :class="{
                         'border-red': errors.length > 0 ? true : false,
@@ -92,6 +94,7 @@
                     <b>Ngày sinh</b>
                   </div>
                   <datepicker
+                    ref="dateOfBirth"
                     class="width-100"
                     v-model="employee.DateOfBirth"
                     placeholder="DD/MM/YYYY"
@@ -108,6 +111,7 @@
                     <input
                       type="radio"
                       id="Nam"
+                      tabindex="6"
                       name="gender"
                       class="radio-gender"
                       v-model="employee.Gender"
@@ -152,6 +156,7 @@
                     <Combobox
                       style="border-radius: 4px; height: 33px"
                       class="width-100"
+                      :tabIndex="tabIndex"
                       :class="{
                         'border-red': errors.length > 0 ? true : false,
                       }"
@@ -176,6 +181,7 @@
                     <input
                       type="text"
                       class="input-modal width-100"
+                      tabindex="7"
                       v-model="employee.IdentityNumber"
                       :class="{
                         'border-red': errors.length > 0 ? true : false,
@@ -190,7 +196,8 @@
                   </div>
                   <datepicker
                     class="width-100"
-                    v-model="employee.IndentityDate"
+                    ref="identityDate"
+                    v-model="employee.IdentityDate"
                     placeholder="DD/MM/YYYY"
                     :format="'DD/MM/YYYY'"
                     :value-type="'YYYY-MM-DD'"
@@ -211,6 +218,7 @@
                     type="text"
                     class="input-modal width-100"
                     maxlength="255"
+                    tabindex="4"
                     v-model="employee.PositionName"
                   />
                 </div>
@@ -224,6 +232,7 @@
                   </div>
                   <input
                     type="text"
+                    tabindex="9"
                     class="input-modal width-100"
                     maxlength="255"
                     v-model="employee.IdentityPlace"
@@ -240,6 +249,7 @@
                 </div>
                 <input
                   type="text"
+                  tabindex="10"
                   class="input-modal width-100"
                   maxlength="255"
                   v-model="employee.Address"
@@ -254,6 +264,7 @@
               </div>
               <input
                 type="text"
+                tabindex="11"
                 class="input-modal width-100"
                 maxlength="255"
                 v-model="employee.PhoneNumber"
@@ -265,6 +276,7 @@
               </div>
               <input
                 type="text"
+                tabindex="12"
                 class="input-modal width-100"
                 maxlength="255"
                 v-model="employee.Hotline"
@@ -281,6 +293,7 @@
               >
                 <input
                   type="text"
+                  tabindex="13"
                   class="input-modal width-100"
                   maxlength="255"
                   v-model="employee.Email"
@@ -304,6 +317,7 @@
               >
                 <input
                   type="text"
+                  tabindex="14"
                   class="input-modal width-100"
                   maxlength="255"
                   v-model="employee.AccountNumber"
@@ -320,6 +334,7 @@
               </div>
               <input
                 type="text"
+                tabindex="15"
                 class="input-modal width-100"
                 maxlength="255"
                 v-model="employee.BankName"
@@ -331,6 +346,7 @@
               </div>
               <input
                 type="text"
+                tabindex="16"
                 class="input-modal width-100"
                 maxlength="255"
                 v-model="employee.BranchName"
@@ -341,13 +357,14 @@
       </ValidationObserver>
       <div class="paging-modal flex">
         <div class="btn-cancel-modal">
-          <button class="btn-white" @click="closeModal">
+          <button class="btn-white" @click="closeModal" tabindex="17">
             <div class="text-add">Hủy</div>
           </button>
         </div>
         <div class="btn-save">
           <button
             class="btn-white"
+            tabindex="18"
             @click="saveBtnClick"
             title="Cất (Ctrl + S)"
             v-shortkey="['ctrl', 's']"
@@ -359,6 +376,7 @@
         <div class="btn-save-add">
           <button
             class="m-btn"
+            tabindex="19"
             @click="saveAddBtnClick"
             title="Cất và thêm (Ctrl + Shift + S)"
             v-shortkey="['ctrl', 'shift', 's']"
@@ -391,41 +409,43 @@ import { required, email, numeric } from "vee-validate/dist/rules";
 import PopupConfirmSave from "../components/base/BasePopupConfirmSave.vue";
 import Combobox from "../components/base/BaseCombobox.vue";
 import PopupWarning from "../components/base/BasePopupWarning.vue";
+import { URL_API, MESSAGE } from "../js/const.js";
+import stringInject from "stringinject";
 
 // custom rule required code
 extend("requiredCode", {
   ...required,
-  message: "Mã không được để trống.",
+  message: MESSAGE.REQUIRED_CODE,
 });
 
 // custom rule required fullname
 extend("requiredName", {
   ...required,
-  message: "Họ và tên không được để trống.",
+  message: MESSAGE.REQUIRED_NAME,
 });
 
 // custom rule check email
 extend("checkEmail", {
   ...email,
-  message: "Email không đúng định dạng.",
+  message: MESSAGE.CHECK_EMAIL,
 });
 
 // custom rule check required department
 extend("requiredDepartment", {
   ...required,
-  message: "Đơn vị không được để trống.",
+  message: MESSAGE.REQUIRED_DEPARTMENT,
 });
 
 // custom rule format account number
 extend("numericAccount", {
   ...numeric,
-  message: "Tài khoản ngân hàng chỉ có thể chứa số.",
+  message: MESSAGE.CHECK_ACCOUNT,
 });
 
 // custom rule format identity number
 extend("numericIdentity", {
   ...numeric,
-  message: "Số CMND chỉ có thể chứa số.",
+  message: MESSAGE.CHECK_IDENTITY,
 });
 
 export default {
@@ -459,7 +479,14 @@ export default {
       isDuplicate: false,
       // check trạng thái img của popup
       isError: true,
+      // tabindex của combobox
+      tabIndex: 3,
     };
+  },
+  mounted() {
+    // set tabindex cho 2 trường datepicker
+    this.setTabindex("dateOfBirth", 5);
+    this.setTabindex("identityDate", 8);
   },
   methods: {
     /**--------------------------------------------
@@ -487,20 +514,33 @@ export default {
      */
     autoNewEmployeeCode() {
       let self = this;
-      axios
-        .get(`https://localhost:44383/api/v1/employees/newEmployeeCode`)
-        .then((res) => {
-          // gán mã mới
-          this.$set(self.employee, "EmployeeCode", res.data);
-          // gán value cho object để so sánh
-          self.employeeOriginalAdd.Gender = 1;
-          self.employeeOriginalAdd.EmployeeCode = res.data;
-          // focus vào ô mã
-          self.$nextTick(() => self.$refs.txtEmployeeCode.focus());
-        })
-        .catch((err) => {
-          console.log(err);
+      try {
+        axios
+          .get(URL_API.API_EMPLOYEE + "/newEmployeeCode")
+          .then((res) => {
+            if (res.status == 200) {
+              // gán mã mới
+              this.$set(self.employee, "EmployeeCode", res.data);
+              // gán value cho object để so sánh
+              self.employeeOriginalAdd.Gender = 1;
+              self.employeeOriginalAdd.EmployeeCode = res.data;
+              // focus vào ô mã
+              self.$nextTick(() => self.$refs.txtEmployeeCode.focus());
+            } else {
+              this.$toast.error(MESSAGE.ERROR_NEW_CODE, {
+                timeout: 2000,
+              });
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      } catch (error) {
+        console.log(error);
+        this.$toast.error(MESSAGE.EXCEPTION_MSG, {
+          timeout: 2000,
         });
+      }
     },
 
     /**---------------------------------------------------------
@@ -509,20 +549,35 @@ export default {
      */
     bindDataToForm() {
       var self = this;
-      // call api
-      axios
-        .get(`https://localhost:44383/api/v1/employees/${self.employeeId}`)
-        .then((res) => {
-          self.employee = res.data;
-          // format date về đúng định dạng
-          self.employee.DateOfBirth = self.formatDate(res.data.DateOfBirth);
-          self.employee.IdentityDate = self.formatDate(res.data.IdentityDate);
-          // assign employee cho employeeOriginalEdit
-          Object.assign(this.employeeOriginalEdit, this.employee);
-        })
-        .catch((error) => {
-          console.log(error);
+      try {
+        // call api
+        axios
+          .get(URL_API.API_EMPLOYEE + "/" + self.employeeId)
+          .then((res) => {
+            if (res.status == 200) {
+              self.employee = res.data;
+              // format date về đúng định dạng
+              self.employee.DateOfBirth = self.formatDate(res.data.DateOfBirth);
+              self.employee.IdentityDate = self.formatDate(
+                res.data.IdentityDate
+              );
+              // assign employee cho employeeOriginalEdit
+              Object.assign(this.employeeOriginalEdit, this.employee);
+            } else {
+              this.$toast.error(MESSAGE.ERROR_LOAD_DATA, {
+                timeout: 2000,
+              });
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      } catch (error) {
+        console.log(error);
+        this.$toast.error(MESSAGE.EXCEPTION_MSG, {
+          timeout: 2000,
         });
+      }
     },
 
     /*--------------------------------------------------
@@ -533,12 +588,14 @@ export default {
       // set error cho EmployeeCode
       if (this.isDuplicate == true) {
         this.$refs.form_employee.setErrors({
-          Code: [`Mã nhân viên đã tồn tại trong hệ thống`],
+          Code: [MESSAGE.CHECK_DUPLICATE_CODE],
         });
         this.isDuplicate = false;
         this.isHiddenWarning = false;
         this.isError = false;
-        this.textError = `Mã nhân viên ${this.employeeCodeDuplicate} đã tồn tại trong hệ thống, vui lòng kiểm tra lại.`;
+        this.textError = stringInject(MESSAGE.ERROR_DUPLICATE_CODE, [
+          this.employeeCodeDuplicate,
+        ]);
         return;
       }
       // đóng popup
@@ -579,12 +636,14 @@ export default {
       // set error cho EmployeeCode
       if (this.isDuplicate == true) {
         this.$refs.form_employee.setErrors({
-          Code: [`Mã nhân viên đã tồn tại trong hệ thống`],
+          Code: [MESSAGE.CHECK_DUPLICATE_CODE],
         });
         this.isDuplicate = false;
         this.isHiddenWarning = false;
         this.isError = false;
-        this.textError = `Mã nhân viên ${this.employeeCodeDuplicate} đã tồn tại trong hệ thống, vui lòng kiểm tra lại.`;
+        this.textError = stringInject(MESSAGE.ERROR_DUPLICATE_CODE, [
+          this.employeeCodeDuplicate,
+        ]);
         return;
       }
       // đóng popup
@@ -628,25 +687,38 @@ export default {
      */
     checkDuplicateEmployeeCode() {
       var self = this;
-      // binding data
-      axios
-        .get("https://localhost:44383/api/v1/employees")
-        .then((res) => {
-          self.employees = res.data;
-          // foreach để tìm giá trị trùng
-          self.employees.forEach((item) => {
-            if (
-              self.employee.EmployeeCode == item.EmployeeCode &&
-              self.employee.EmployeeId != item.EmployeeId
-            ) {
-              this.isDuplicate = true;
-              this.employeeCodeDuplicate = item.EmployeeCode;
+      try {
+        // binding data
+        axios
+          .get(URL_API.API_EMPLOYEE)
+          .then((res) => {
+            if (res.status == 200) {
+              self.employees = res.data;
+              // foreach để tìm giá trị trùng
+              self.employees.forEach((item) => {
+                if (
+                  self.employee.EmployeeCode == item.EmployeeCode &&
+                  self.employee.EmployeeId != item.EmployeeId
+                ) {
+                  this.isDuplicate = true;
+                  this.employeeCodeDuplicate = item.EmployeeCode;
+                }
+              });
+            } else {
+              this.$toast.error(MESSAGE.ERROR_LOAD_DATA, {
+                timeout: 2000,
+              });
             }
+          })
+          .catch((res) => {
+            console.log(res);
           });
-        })
-        .catch((res) => {
-          console.log(res);
+      } catch (error) {
+        console.log(error);
+        this.$toast.error(MESSAGE.EXCEPTION_MSG, {
+          timeout: 2000,
         });
+      }
     },
 
     /**-----------------------------------------------------------
@@ -696,25 +768,37 @@ export default {
      */
     addEmployee() {
       var self = this;
-      axios
-        .post(`https://localhost:44383/api/v1/employees`, self.employee)
-        .then((res) => {
-          console.log(res);
-          // load lại table
-          self.$emit("reloadTableAndFilter");
-          this.$toast.success("Thêm mới nhân viên thành công", {
-            timeout: 2000,
+      try {
+        axios
+          .post(URL_API.API_EMPLOYEE, self.employee)
+          .then((res) => {
+            if (res.status == 201) {
+              // load lại table
+              self.$emit("reloadTableAndFilter");
+              this.$toast.success(MESSAGE.SUCCESS_ADD_EMPLOYEE, {
+                timeout: 2000,
+              });
+              // clear object
+              this.employee = {};
+              // sinh mã mới
+              this.autoNewEmployeeCode();
+              this.employee.Gender = 1;
+              // debugger; // eslint-disable-line
+            } else {
+              this.$toast.error(MESSAGE.ERROR_ADD_EMPLOYEE, {
+                timeout: 2000,
+              });
+            }
+          })
+          .catch((errror) => {
+            console.log(errror);
           });
-          // clear object
-          this.employee = {};
-          // sinh mã mới
-          this.autoNewEmployeeCode();
-          this.employee.Gender = 1;
-          debugger; // eslint-disable-line
-        })
-        .catch((errror) => {
-          console.log(errror);
+      } catch (error) {
+        console.log(error);
+        this.$toast.error(MESSAGE.EXCEPTION_MSG, {
+          timeout: 2000,
         });
+      }
     },
 
     /**------------------------------------------------------------------------
@@ -723,22 +807,44 @@ export default {
      */
     editEmployee() {
       var self = this;
-      axios
-        .put(
-          `https://localhost:44383/api/v1/employees/${self.employeeId}`,
-          self.employee
-        )
-        .then((res) => {
-          console.log(res);
-          // load lại table
-          self.$emit("reloadTableAndFilter");
-          this.$toast.success("Sửa thông tin nhân viên thành công", {
-            timeout: 2000,
+      try {
+        axios
+          .put(URL_API.API_EMPLOYEE + "/" + self.employeeId, self.employee)
+          .then((res) => {
+            if (res.status == 200) {
+              console.log(res);
+              // load lại table
+              self.$emit("reloadTableAndFilter");
+              this.$toast.success(MESSAGE.SUCCESS_EDIT_EMPLOYEE, {
+                timeout: 2000,
+              });
+            } else {
+              this.$toast.error(MESSAGE.ERROR_EDIT_EMPLOYEE, {
+                timeout: 2000,
+              });
+            }
+          })
+          .catch((error) => {
+            console.log(error);
           });
-        })
-        .catch((error) => {
-          console.log(error);
+      } catch (error) {
+        console.log(error);
+        this.$toast.error(MESSAGE.EXCEPTION_MSG, {
+          timeout: 2000,
         });
+      }
+    },
+
+    /**---------------------------------------------------
+     * Hàm nhân bản nhân viên
+     * CreatedBy:LQNHAT(29/08/2021)
+     */
+    cloneToEmployee(employee) {
+      this.employee = employee;
+      // this.employee.EmployeeId = null;
+      this.autoNewEmployeeCode();
+      this.mode = 0;
+      this.employee.EmployeeId = "00000000-0000-0000-0000-000000000000";
     },
 
     /**------------------------------------------------------------------------------
@@ -757,7 +863,7 @@ export default {
           // reset error
           this.$refs.form_employee.reset();
         } else {
-          // mở popup 
+          // mở popup
           this.$refs.popupConfirmSave.openPopupConfirmSave();
         }
       } else {
@@ -793,18 +899,6 @@ export default {
       this.$refs.form_employee.reset();
     },
 
-    /**---------------------------------------------------
-     * Hàm nhân bản nhân viên
-     * CreatedBy:LQNHAT(29/08/2021)
-     */
-    cloneToEmployee(employee) {
-      this.employee = employee;
-      // this.employee.EmployeeId = null;
-      this.autoNewEmployeeCode();
-      this.mode = 0;
-      this.employee.EmployeeId = "00000000-0000-0000-0000-000000000000";
-    },
-
     /**----------------------------------------------------------
      * Hàm format ngày tháng năm trên form chỉnh sửa
      * CreateBy:LQNhat(28/08/2021)
@@ -813,6 +907,14 @@ export default {
       if (date) {
         return moment(String(date)).format("yyyy-MM-DD");
       }
+    },
+
+    /**-----------------------------------------------------------------
+     * Set tabindex cho trường datepicker
+     * CreatedBy:LQNHAT(01/09/2021)
+     */
+    setTabindex(refName, tab) {
+      this.$refs[refName].$refs.input.setAttribute("tabindex", tab);
     },
   },
 };
