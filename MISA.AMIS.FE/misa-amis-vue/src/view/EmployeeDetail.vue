@@ -173,22 +173,12 @@
                   <div class="text-modal">
                     <b>Số CMND </b>
                   </div>
-                  <ValidationProvider
-                    rules="numericIdentity"
-                    name="IdentityNumber"
-                    v-slot="{ errors }"
-                  >
-                    <input
-                      type="text"
-                      class="input-modal width-100"
-                      tabindex="7"
-                      v-model="employee.IdentityNumber"
-                      :class="{
-                        'border-red': errors.length > 0 ? true : false,
-                      }"
-                      :title="errors[0]"
-                    />
-                  </ValidationProvider>
+                  <input
+                    type="text"
+                    class="input-modal width-100"
+                    tabindex="7"
+                    v-model="employee.IdentityNumber"
+                  />
                 </div>
                 <div class="input width-35">
                   <div class="text-modal">
@@ -310,23 +300,13 @@
               <div class="text-modal">
                 <b>Tài khoản ngân hàng</b>
               </div>
-              <ValidationProvider
-                rules="numericAccount"
-                name="AccountNumber"
-                v-slot="{ errors }"
-              >
-                <input
-                  type="text"
-                  tabindex="14"
-                  class="input-modal width-100"
-                  maxlength="255"
-                  v-model="employee.AccountNumber"
-                  :class="{
-                    'border-red': errors.length > 0 ? true : false,
-                  }"
-                  :title="errors[0]"
-                />
-              </ValidationProvider>
+              <input
+                type="text"
+                tabindex="14"
+                class="input-modal width-100"
+                maxlength="255"
+                v-model="employee.AccountNumber"
+              />
             </div>
             <div class="input pdr-8 width-25">
               <div class="text-modal">
@@ -405,11 +385,11 @@
 import axios from "axios";
 import moment from "moment";
 import { extend } from "vee-validate";
-import { required, email, numeric } from "vee-validate/dist/rules";
+import { required, email} from "vee-validate/dist/rules";
 import PopupConfirmSave from "../components/base/BasePopupConfirmSave.vue";
 import Combobox from "../components/base/BaseCombobox.vue";
 import PopupWarning from "../components/base/BasePopupWarning.vue";
-import { URL_API, MESSAGE } from "../js/const.js";
+import { URL_API, MESSAGE, MODE } from "../js/const.js";
 import stringInject from "stringinject";
 
 // custom rule required code
@@ -436,18 +416,6 @@ extend("requiredDepartment", {
   message: MESSAGE.REQUIRED_DEPARTMENT,
 });
 
-// custom rule format account number
-extend("numericAccount", {
-  ...numeric,
-  message: MESSAGE.CHECK_ACCOUNT,
-});
-
-// custom rule format identity number
-extend("numericIdentity", {
-  ...numeric,
-  message: MESSAGE.CHECK_IDENTITY,
-});
-
 export default {
   name: "EmployeeDetail",
   components: {
@@ -468,7 +436,7 @@ export default {
       // Id của nhân viên
       employeeId: "",
       // mode cho modal : 0 là add - 1 là edit
-      mode: 0,
+      mode: MODE.ADD,
       // mảng chứa lỗi khi validate
       notifications: [],
       // trạng thái popup warning
@@ -497,7 +465,7 @@ export default {
       this.mode = mode;
       this.employeeId = id;
       // mode == 0 thì sinh mã mới
-      if (mode == 0) {
+      if (mode == MODE.ADD) {
         this.employee = {};
         this.employee.Gender = 1;
         this.autoNewEmployeeCode();
@@ -608,7 +576,7 @@ export default {
           return;
         }
         // nếu không có lỗi
-        if (this.mode == 0) {
+        if (this.mode == MODE.ADD) {
           //add nv
           this.addEmployee();
           // clear object
@@ -656,13 +624,13 @@ export default {
           return;
         }
         // nếu không có lỗi
-        if (this.mode == 0) {
+        if (this.mode == MODE.ADD) {
           //add nv
           this.addEmployee();
           // reset error
           this.$refs.form_employee.reset();
           // gán mode = 0 để add
-          this.mode = 0;
+          this.mode = MODE.ADD;
           debugger; // eslint-disable-line
         } else {
           //edit nv
@@ -674,7 +642,7 @@ export default {
           // sinh mã mới
           this.autoNewEmployeeCode();
           // gán mode = 0 để add
-          this.mode = 0;
+          this.mode = MODE.ADD;
           this.employee.Gender = 1;
           debugger; // eslint-disable-line
         }
@@ -749,16 +717,6 @@ export default {
         this.isHiddenWarning = false;
         this.isError = true;
         this.textError = this.notifications.Email[0];
-      }
-      if (this.notifications.AccountNumber.length > 0) {
-        this.isHiddenWarning = false;
-        this.isError = true;
-        this.textError = this.notifications.AccountNumber[0];
-      }
-      if (this.notifications.IdentityNumber.length > 0) {
-        this.isHiddenWarning = false;
-        this.isError = true;
-        this.textError = this.notifications.IdentityNumber[0];
       }
     },
 
@@ -843,7 +801,7 @@ export default {
       this.employee = employee;
       // this.employee.EmployeeId = null;
       this.autoNewEmployeeCode();
-      this.mode = 0;
+      this.mode = MODE.ADD;
       this.employee.EmployeeId = "00000000-0000-0000-0000-000000000000";
     },
 
@@ -853,7 +811,7 @@ export default {
      */
     closeFormDetail() {
       // check mode
-      if (this.mode == 0) {
+      if (this.mode == MODE.ADD) {
         if (
           JSON.stringify(Object.values(this.employeeOriginalAdd)) ===
           JSON.stringify(Object.values(this.employee))

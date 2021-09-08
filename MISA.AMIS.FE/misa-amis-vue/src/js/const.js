@@ -13,8 +13,6 @@ export const MESSAGE = {
     REQUIRED_NAME: "Họ và tên không được để trống.",
     CHECK_EMAIL: "Email không đúng định dạng.",
     REQUIRED_DEPARTMENT: "Đơn vị không được để trống.",
-    CHECK_ACCOUNT: "Tài khoản ngân hàng chỉ có thể chứa số.",
-    CHECK_IDENTITY: "Số CMND chỉ có thể chứa số.",
     ERROR_NEW_CODE: "Sinh mã nhân viên mới không thành công",
     CHECK_DUPLICATE_CODE: "Mã nhân viên đã tồn tại trong hệ thống.",
     ERROR_DUPLICATE_CODE: "Mã nhân viên <{0}> đã tồn tại trong hệ thống, vui lòng kiểm tra lại.",
@@ -26,4 +24,10 @@ export const MESSAGE = {
     CONFIRM_DELETE: "Bạn có thực sự muốn xóa Nhân viên <{0}> không?",
     SUCCESS_DELETE: "Xóa nhân viên thành công",
     ERROR_DELETE: "Xóa nhân viên không thành công",
+}
+
+export const MODE = {
+    ADD : 0,
+    EDIT: 1,
+    CLONE: 2,
 }

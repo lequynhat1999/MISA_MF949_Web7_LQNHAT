@@ -53,7 +53,7 @@
               <th class="column-sticky-left-3">TÊN NHÂN VIÊN</th>
               <th>GIỚI TÍNH</th>
               <th style="text-align: center">NGÀY SINH</th>
-              <th>SỐ CMND</th>
+              <th title="Số chứng minh nhân dân">SỐ CMND</th>
               <th>CHỨC DANH</th>
               <th>TÊN ĐƠN VỊ</th>
               <th>SỐ TÀI KHOẢN</th>
@@ -183,7 +183,7 @@ import EmployeeDetail from "./EmployeeDetail.vue";
 import Dropdown from "../components/base/BaseDropdown.vue";
 import Loading from "../components/base/BaseLoading.vue";
 import PopupDelete from "../components/base/BasePoupDelete.vue";
-import { URL_API, MESSAGE } from "../js/const.js";
+import { URL_API, MESSAGE,MODE } from "../js/const.js";
 import axios from "axios";
 import moment from "moment";
 export default {
@@ -225,7 +225,7 @@ export default {
       // id của nhân viên
       employeeId: "",
       // mode form detail: 0 là add, 1 là edit
-      modeFormDetail: 0,
+      modeFormDetail: MODE.ADD,
       // hidden option
       isHiddenOption: true,
       // loading
@@ -501,7 +501,7 @@ export default {
      */
     openModal() {
       this.isOpenModal = !this.isOpenModal;
-      this.modeFormDetail = 0;
+      this.modeFormDetail = MODE.ADD;
       this.$refs.modeForm.show(this.modeFormDetail);
     },
 
@@ -520,7 +520,7 @@ export default {
     rowClick(index) {
       this.employeeId = this.employees[index].EmployeeId;
       this.isOpenModal = !this.isOpenModal;
-      this.modeFormDetail = 1;
+      this.modeFormDetail = MODE.EDIT;
       this.$refs.modeForm.show(this.modeFormDetail, this.employeeId);
     },
 

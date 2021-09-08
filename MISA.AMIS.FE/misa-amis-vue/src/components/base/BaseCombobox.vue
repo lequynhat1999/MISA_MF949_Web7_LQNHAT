@@ -20,7 +20,7 @@
         <thead>
           <tr>
             <th>Mã đơn vị</th>
-            <th>Tên đơn vị</th>
+            <th style="text-align: left">Tên đơn vị</th>
           </tr>
         </thead>
         <tbody>
@@ -34,7 +34,7 @@
             }"
           >
             <td>{{ department.DepartmentCode }}</td>
-            <td>{{ department.DepartmentName }}</td>
+            <td style="text-align: left">{{ department.DepartmentName }}</td>
           </tr>
         </tbody>
       </table>
